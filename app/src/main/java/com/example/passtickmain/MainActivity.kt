@@ -112,6 +112,7 @@ class MainActivity : ComponentActivity() {
 fun AddMenu() {
     val usernameInput = rememberSaveable { mutableStateOf("Username") }
     val passwordInput = rememberSaveable { mutableStateOf("Password") }
+    val siteInput = rememberSaveable { mutableStateOf("Site") }
     val ctx = LocalContext.current
 
     TextField (
@@ -126,10 +127,16 @@ fun AddMenu() {
             passwordInput.value = newValue }
     )
     Spacer(modifier = Modifier.padding(10.dp))
+    TextField (
+        value = siteInput.value,
+        onValueChange = { newValue ->
+            siteInput.value = newValue }
+    )
+    Spacer(modifier = Modifier.padding(10.dp))
     Row {
         Button(
             onClick = {
-                Toast.makeText(ctx, "Added ${usernameInput.value} ${passwordInput.value}", Toast.LENGTH_LONG).show()
+                Toast.makeText(ctx, "Added ${usernameInput.value} ${passwordInput.value} ${siteInput.value}", Toast.LENGTH_LONG).show()
             }) {
             Text(text = "Add")
         }
@@ -152,7 +159,7 @@ fun AddButton() {
         Text(text = text)
     }
 }
-data class AccountEntry(val username: String, val password: String)
+data class AccountEntry(val username: String, val password: String, val siteName: String)
 
 //Given a list of AccountEntry, display each given the
 @Composable
@@ -169,7 +176,8 @@ fun DisplayPasswordList(entries: List<AccountEntry>) {
 fun DisplayEntry(entry: AccountEntry) {
     Row(modifier = Modifier.padding(all = 8.dp)) {
         Text(text = entry.username + "   ")
-        Text(text = entry.password)
+        Text(text = entry.password + "   ")
+        Text(text = entry.siteName)
     }
 }
 
