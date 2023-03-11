@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/PassStick.iml" filepath="$PROJECT_DIR$/.idea/PassStick.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PasstickMain.iml" filepath="$PROJECT_DIR$/.idea/modules/PasstickMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PasstickMain.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PasstickMain.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PasstickMain.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PasstickMain.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PasstickMain.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PasstickMain.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PasstickMain.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PasstickMain.app.unitTest.iml" />
     </modules>
   </component>
 </project>
