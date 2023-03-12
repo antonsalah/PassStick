@@ -1,20 +1,11 @@
-package com.example.passtickmain
+package com.example.passtickmain.data
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
-@Entity(tableName = "accounts")
-data class Account(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-
-    val serviceName: String,
-    var userName: String,
-    var password: String
-)
 
 @Dao //Data Access Object
-interface accountDao {
+interface AccountDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(account: Account)
