@@ -8,7 +8,7 @@ interface AccountRepository {
 
     // Retrieve an Account from the given data source that matches with the ID
 
-    fun getAccountStream(id: Int):Flow<Account>
+    fun getAccountStream(id: Int):Flow<Account?>
 
     //Insert Account in the data source
 
