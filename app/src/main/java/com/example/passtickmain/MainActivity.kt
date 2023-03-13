@@ -87,6 +87,8 @@ fun PasstickUITheme(
         content = content
     )
 }
+
+data class AccountEntry(val username: String, val password: String, val siteName: String)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,6 +139,8 @@ fun AddMenu() {
         Button(
             onClick = {
                 Toast.makeText(ctx, "Added ${usernameInput.value} ${passwordInput.value} ${siteInput.value}", Toast.LENGTH_LONG).show()
+                val newEntry = AccountEntry(usernameInput.value, passwordInput.value, siteInput.value)
+                SampleData.passwordListSample += newEntry
             }) {
             Text(text = "Add")
         }
@@ -159,7 +163,7 @@ fun AddButton() {
         Text(text = text)
     }
 }
-data class AccountEntry(val username: String, val password: String, val siteName: String)
+
 
 //Given a list of AccountEntry, display each given the
 @Composable

@@ -1,10 +1,13 @@
 package com.example.passtickmain
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import java.security.KeyStore.Entry
 
 object SampleData {
     // Sample conversation data
-    val passwordListSample = listOf(
+    var passwordListSample by mutableStateOf(listOf(
         AccountEntry(
             "Username1",
             "Password1",
@@ -155,5 +158,6 @@ object SampleData {
             "Password30",
             "Service30"
         ),
+    )
     )
 }
