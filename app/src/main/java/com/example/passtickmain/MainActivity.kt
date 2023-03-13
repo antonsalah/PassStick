@@ -27,7 +27,6 @@ import com.example.passtickmain.ui.theme.Purple700
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import android.widget.Toast
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
