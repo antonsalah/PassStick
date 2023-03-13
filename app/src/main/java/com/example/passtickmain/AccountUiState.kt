@@ -1,4 +1,4 @@
-package com.example.passtickmain.ui.theme
+package com.example.passtickmain
 
 import com.example.passtickmain.data.Account
 
