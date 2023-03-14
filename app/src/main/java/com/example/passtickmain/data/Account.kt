@@ -9,5 +9,5 @@ data class Account(
 
     @ColumnInfo(name = "user_name") val userName: String,
     @ColumnInfo(name = "password") val password: String,
-    @ColumnInfo(name = "service_name") val service_Name: String
+    @ColumnInfo(name = "service_name") val serviceName: String
 )

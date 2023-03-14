@@ -1,5 +1,6 @@
-package com.example.passtickmain.data
 
+package com.example.passtickmain.data
+/*
 import android.content.Context
 
 /**
@@ -18,3 +19,5 @@ class AppDataContainer(private val context: Context) : AppContainer {
         OfflineAccountRepository(AccountDatabase.getDatabase(context).accountDao())
     }
 }
+
+ */

@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -28,6 +29,7 @@ import com.example.passtickmain.ui.theme.Purple500
 import com.example.passtickmain.ui.theme.Purple700
 import com.example.passtickmain.ui.theme.Teal200
 import kotlinx.coroutines.flow.Flow
+import android.content.*
 
 val Shapes = Shapes(
     small = RoundedCornerShape(4.dp),
@@ -136,8 +138,8 @@ fun AddMenu() {
         Button(
             onClick = {
                 Toast.makeText(ctx, "Added ${usernameInput.value} ${passwordInput.value} ${siteInput.value}", Toast.LENGTH_LONG).show()
-                val account2bAdded = Account(usernameInput.value.toInt(), passwordInput.value, siteInput.value)
-                val db =AppDatabase.getInstance(context).accountDao()
+                val account2bAdded = Account(1,usernameInput.value, passwordInput.value, siteInput.value)
+                val db = AccountDatabase.getDatabase(ctx).accountDao()
                 db.addAccount(account2bAdded)
 
             }) {
@@ -166,18 +168,25 @@ fun AddButton() {
 
 //Given a list of AccountEntry, display each given the
 @Composable
-fun DisplayPasswordList(entries: Flow<List<Account>>) {
+fun DisplayPasswordList(entries: List<Account>) {
+    val ctx = LocalContext.current
     LazyColumn {
-                val db = AppDatabase.getInstance(context).accountDao().getAllAccounts()
-
+        var db = AccountDatabase.getDatabase(ctx).accountDao()
+        var listOfAllAcc = db.getAllAccounts()
+        items(listOfAllAcc) { entry ->
+            DisplayEntry(entry)
         }
     }
+}
 
 
 //Displays one entry given an AccountEntry
 @Composable
 fun DisplayEntry(entry: Account){
     Row(modifier = Modifier.padding(all = 8.dp)) {
+
+
+
         Text(text = entry.userName + "   ")
         Text(text = entry.password + "   ")
         Text(text = entry.serviceName)

@@ -5,23 +5,22 @@ import androidx.room.RoomDatabase
 import android.content.Context
 import androidx.room.Room
 
-@Database(entities = [Account::class], version = 1)
-abstract class AppDatabase : RoomDatabase() {
+@Database(entities = [Account::class], version = 1, exportSchema = false)
+abstract class AccountDatabase : RoomDatabase() {
 
     abstract fun accountDao(): AccountDao
 
     companion object {
-        private var instance: AppDatabase? = null
+        @Volatile
+        private var Instance: AccountDatabase? = null
 
-        fun getInstance(context: Context): AppDatabase {
-            return instance ?: synchronized(this) {
-                val database = Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "app_database"
-                ).build()
-                instance = database
-                database
+        fun getDatabase(context: Context): AccountDatabase{
+            //if the instance is not null, return it. Otherwise create a new database instance.
+            return Instance ?: synchronized(this) {
+                Room.databaseBuilder(context, AccountDatabase::class.java, "account_database")
+                    .fallbackToDestructiveMigration()
+                    .build()
+                    .also{ Instance = it}
             }
         }
     }
