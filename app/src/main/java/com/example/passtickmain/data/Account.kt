@@ -7,7 +7,7 @@ data class Account(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
 
-    val serviceName: String,
-    var userName: String,
-    var password: String
+    @ColumnInfo(name = "user_name") val userName: String,
+    @ColumnInfo(name = "password") val password: String,
+    @ColumnInfo(name = "service_name") val service_Name: String
 )

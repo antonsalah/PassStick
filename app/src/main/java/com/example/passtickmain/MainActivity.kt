@@ -1,36 +1,33 @@
 package com.example.passtickmain
 
+
+import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import com.example.passtickmain.ui.theme.Purple200
-import com.example.passtickmain.ui.theme.Purple500
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
-import com.example.passtickmain.ui.theme.Teal200
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material.Typography
+import com.example.passtickmain.data.*
+import com.example.passtickmain.ui.theme.Purple200
+import com.example.passtickmain.ui.theme.Purple500
 import com.example.passtickmain.ui.theme.Purple700
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Shapes
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import android.widget.Toast
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.platform.LocalContext
+import com.example.passtickmain.ui.theme.Teal200
+import kotlinx.coroutines.flow.Flow
 
 val Shapes = Shapes(
     small = RoundedCornerShape(4.dp),
@@ -102,7 +99,7 @@ class MainActivity : ComponentActivity() {
                     Column {
                         AddMenu()
                         Spacer(modifier = Modifier.padding(10.dp))
-                        DisplayPasswordList(SampleData.passwordListSample)
+                        //DisplayPasswordList(database.getDatabase().accountDao().getAllAccounts())
                     }
                 }
             }
@@ -139,8 +136,10 @@ fun AddMenu() {
         Button(
             onClick = {
                 Toast.makeText(ctx, "Added ${usernameInput.value} ${passwordInput.value} ${siteInput.value}", Toast.LENGTH_LONG).show()
-                val newEntry = AccountEntry(usernameInput.value, passwordInput.value, siteInput.value)
-                SampleData.passwordListSample += newEntry
+                val account2bAdded = Account(usernameInput.value.toInt(), passwordInput.value, siteInput.value)
+                val db =AppDatabase.getInstance(context).accountDao()
+                db.addAccount(account2bAdded)
+
             }) {
             Text(text = "Add")
         }
@@ -167,21 +166,21 @@ fun AddButton() {
 
 //Given a list of AccountEntry, display each given the
 @Composable
-fun DisplayPasswordList(entries: List<AccountEntry>) {
+fun DisplayPasswordList(entries: Flow<List<Account>>) {
     LazyColumn {
-        items(entries) { entry ->
-            DisplayEntry(entry)
+                val db = AppDatabase.getInstance(context).accountDao().getAllAccounts()
+
         }
     }
-}
+
 
 //Displays one entry given an AccountEntry
 @Composable
-fun DisplayEntry(entry: AccountEntry) {
+fun DisplayEntry(entry: Account){
     Row(modifier = Modifier.padding(all = 8.dp)) {
-        Text(text = entry.username + "   ")
+        Text(text = entry.userName + "   ")
         Text(text = entry.password + "   ")
-        Text(text = entry.siteName)
+        Text(text = entry.serviceName)
     }
 }
 
