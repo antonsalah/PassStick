@@ -27,7 +27,6 @@ import com.example.passtickmain.ui.theme.Purple700
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import android.widget.Toast
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
@@ -145,22 +144,7 @@ fun AddMenu() {
             Text(text = "Add")
         }
         Spacer(modifier = Modifier.padding(5.dp))
-        Button(
-            onClick = {
 
-            }) {
-            Text(text = "Initialize")
-        }
-    }
-}
-@Composable
-fun AddButton() {
-    val ctx = LocalContext.current
-    val text = "some text"
-    Button(onClick = {
-        Toast.makeText(ctx, text, Toast.LENGTH_LONG).show()
-    }) {
-        Text(text = text)
     }
 }
 
