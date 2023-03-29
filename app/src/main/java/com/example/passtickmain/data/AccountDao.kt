@@ -20,7 +20,7 @@ interface accountDao {
     suspend fun insert(account: Account)
 
     @Update
-    suspend fun  update(account: Account)
+    suspend fun update(account: Account)
 
     @Delete
     suspend fun delete(account: Account)

@@ -8,6 +8,6 @@ data class Account(
     val id: Int = 0,
 
     val serviceName: String,
-    var userName: String,
+    var username: String,
     var password: String
 )
