@@ -1,17 +1,8 @@
 package com.example.passtickmain
 
 import androidx.room.*
+import com.example.passtickmain.data.Account
 import kotlinx.coroutines.flow.Flow
-
-@Entity(tableName = "accounts")
-data class Account(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-
-    val serviceName: String,
-    var userName: String,
-    var password: String
-)
 
 @Dao //Data Access Object
 interface accountDao {
