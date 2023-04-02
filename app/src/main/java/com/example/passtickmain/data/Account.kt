@@ -1,6 +1,6 @@
 package com.example.passtickmain.data
-
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity(tableName = "accounts")
 data class Account(
