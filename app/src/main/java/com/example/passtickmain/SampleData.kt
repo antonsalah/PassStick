@@ -1,163 +1,129 @@
 package com.example.passtickmain
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import java.security.KeyStore.Entry
 
 object SampleData {
     // Sample conversation data
-    var passwordListSample by mutableStateOf(listOf(
+    val passwordListSample = listOf(
         AccountEntry(
             "Username1",
-            "Password1",
-            "Service1"
+            "Password1"
         ),
         AccountEntry(
             "Username2",
-            "Password2",
-            "Service2"
+            "Password2"
         ),
         AccountEntry(
             "Username3",
-            "Password3",
-            "Service3"
+            "Password3"
         ),
         AccountEntry(
             "Username4",
-            "Password4",
-            "Service4"
+            "Password4"
         ),
         AccountEntry(
             "Username5",
-            "Password5",
-            "Service5"
+            "Password5"
         ),
         AccountEntry(
             "Username6",
-            "Password6",
-            "Service6"
+            "Password6"
         ),
         AccountEntry(
             "Username7",
-            "Password7",
-            "Service7"
+            "Password7"
         ),
         AccountEntry(
             "Username8",
-            "Password8",
-            "Service8"
+            "Password8"
         ),
         AccountEntry(
             "Username9",
-            "Password9",
-            "Service9"
+            "Password9"
         ),
         AccountEntry(
             "Username10",
-            "Password10",
-            "Service10"
+            "Password10"
         ),
         AccountEntry(
             "Username11",
-            "Password11",
-            "Service11"
+            "Password11"
         ),
         AccountEntry(
             "Username12",
-            "Password12",
-            "Service12"
+            "Password12"
         ),
         AccountEntry(
             "Username13",
-            "Password13",
-            "Service13"
+            "Password13"
         ),
         AccountEntry(
             "Username14",
-            "Password14",
-            "Service14"
+            "Password14"
         ),
         AccountEntry(
             "Username15",
-            "Password15",
-            "Service15"
+            "Password15"
         ),
         AccountEntry(
             "Username16",
-            "Password16",
-            "Service16"
+            "Password16"
         ),
         AccountEntry(
             "Username17",
-            "Password17",
-            "Service17"
+            "Password17"
         ),
         AccountEntry(
             "Username18",
-            "Password18",
-            "Service18"
+            "Password18"
         ),
         AccountEntry(
             "Username19",
-            "Password19",
-            "Service19"
+            "Password19"
         ),
         AccountEntry(
             "Username20",
-            "Password20",
-            "Service20"
+            "Password20"
         ),
         AccountEntry(
             "Username21",
-            "Password21",
-            "Service21"
+            "Password21"
         ),
         AccountEntry(
             "Username22",
-            "Password22",
-            "Service22"
+            "Password22"
         ),
         AccountEntry(
             "Username23",
-            "Password23",
-            "Service23"
+            "Password23"
         ),
         AccountEntry(
             "Username24",
-            "Password24",
-            "Service24"
+            "Password24"
         ),
         AccountEntry(
             "Username25",
-            "Password25",
-            "Service25"
+            "Password25"
         ),
         AccountEntry(
             "Username26",
-            "Password26",
-            "Service26"
+            "Password26"
         ),
         AccountEntry(
             "Username27",
-            "Password27",
-            "Service27"
+            "Password27"
         ),
         AccountEntry(
             "Username28",
-            "Password28",
-            "Service28"
+            "Password28"
         ),
         AccountEntry(
             "Username29",
-            "Password29",
-            "Service29"
+            "Password29"
         ),
         AccountEntry(
             "Username30",
-            "Password30",
-            "Service30"
+            "Password30"
         ),
-    )
     )
 }

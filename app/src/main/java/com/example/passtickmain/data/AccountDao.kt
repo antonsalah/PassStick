@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.example.passtickmain
 
 import androidx.room.*
@@ -6,6 +7,16 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao //Data Access Object
 interface accountDao {
+=======
+package com.example.passtickmain.data
+
+import androidx.room.*
+import kotlinx.coroutines.flow.Flow
+
+
+@Dao //Data Access Object
+interface AccountDao {
+>>>>>>> origin/Data/UI_Architecture
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(account: Account)
@@ -21,8 +32,11 @@ interface accountDao {
 
     @Query("SELECT * FROM accounts WHERE id = accountId")
     fun getAccount(accountId: Int): Flow<Account>
+<<<<<<< HEAD
 
     @Query("SELECT * FROM accounts WHERE serviceName = serviceName")
     fun getAccountByService(serviceName: String): Flow<Account>
+=======
+>>>>>>> origin/Data/UI_Architecture
 }
 

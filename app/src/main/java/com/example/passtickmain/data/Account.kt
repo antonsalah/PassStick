@@ -1,6 +1,11 @@
 package com.example.passtickmain.data
+<<<<<<< HEAD
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+=======
+
+import androidx.room.*
+>>>>>>> origin/Data/UI_Architecture
 
 @Entity(tableName = "accounts")
 data class Account(
