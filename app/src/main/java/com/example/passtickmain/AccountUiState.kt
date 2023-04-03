@@ -10,19 +10,19 @@ data class AccountUiState(
 )
 
 
-fun AccountUiState.toAccount(): Account = Account(
-    id = id,
-    userName = userName,
-    password = password,
-    serviceName = serviceName
-)
+//fun AccountUiState.toAccount(): Account = Account(
+  //  id = id,
+    //userName = userName,
+    //password = password,
+    //serviceName = serviceName
+//)
 
 /**
  * Extension function to convert [Account] to [AccountUiState]
  */
 fun Account.toItemUiState(actionEnabled: Boolean = false): AccountUiState = AccountUiState(
     id = id,
-    userName = userName,
+    //userName = userName,
     password = password,
     serviceName = serviceName,
 )
