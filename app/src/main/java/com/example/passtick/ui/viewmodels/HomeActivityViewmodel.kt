@@ -1,11 +1,9 @@
-package com.example.passtickmain.ui.viewmodels
+package com.example.passtick.ui.viewmodels
 
-import android.os.Bundle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 
-import com.example.passtickmain.data.*
+import com.example.passtick.data.*
 import kotlinx.coroutines.flow.*
 
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
