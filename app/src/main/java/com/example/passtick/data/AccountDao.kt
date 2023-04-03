@@ -1,4 +1,4 @@
-package com.example.passtickmain.data
+package com.example.passtick.data
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +19,7 @@ interface AccountDao {
     @Query("SELECT * FROM accounts")
     fun getAllAccounts(): Flow<List<Account>>
 
-    @Query("SELECT * FROM accounts WHERE id = accountId")
-    fun getAccount(accountId: Int): Flow<Account>
+    @Query("SELECT * FROM accounts WHERE id = :id")
+    fun getAccount(id: Int): Flow<Account>
 }
 

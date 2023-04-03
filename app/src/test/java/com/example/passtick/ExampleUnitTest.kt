@@ -1,4 +1,4 @@
-package com.example.passtickmain
+package com.example.passtick
 
 import org.junit.Test
 

@@ -1,6 +1,4 @@
-package com.example.passtickmain
-
-import com.example.passtickmain.AccountEntry
+package com.example.passtick
 
 object SampleData {
     // Sample conversation data

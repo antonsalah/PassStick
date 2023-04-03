@@ -1,9 +1,8 @@
-package com.example.passtickmain.data
+package com.example.passtick.data
 
 import  androidx.room.Database
 import androidx.room.RoomDatabase
 import android.content.Context
-import androidx.compose.runtime.internal.composableLambdaNInstance
 import androidx.room.Room
 
 @Database(entities = [Account::class], version = 1, exportSchema = false)

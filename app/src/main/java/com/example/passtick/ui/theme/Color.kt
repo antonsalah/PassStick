@@ -1,4 +1,4 @@
-package com.example.passtickmain.ui.theme
+package com.example.passtick.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
