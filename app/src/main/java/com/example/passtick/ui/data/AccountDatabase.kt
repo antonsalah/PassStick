@@ -1,4 +1,4 @@
-package com.example.passtick.data
+package com.example.passtick.ui.data
 
 import  androidx.room.Database
 import androidx.room.RoomDatabase
@@ -14,7 +14,7 @@ abstract class AccountDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AccountDatabase? = null
 
-        fun getDatabase(context: Context): AccountDatabase{
+        fun getDatabase(context: Context): AccountDatabase {
             //if the instance is not null, return it. Otherwise create a new database instance.
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(context, AccountDatabase::class.java, "account_database")

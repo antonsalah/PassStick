@@ -87,7 +87,6 @@ fun PasstickUITheme(
     )
 }
 
-data class AccountEntry(val username: String, val password: String, val siteName: String)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,7 +100,6 @@ class MainActivity : ComponentActivity() {
                     Column {
                         AddMenu()
                         Spacer(modifier = Modifier.padding(10.dp))
-                        DisplayPasswordList(SampleData.passwordListSample)
                     }
                 }
             }
@@ -138,8 +136,8 @@ fun AddMenu() {
         Button(
             onClick = {
                 Toast.makeText(ctx, "Added ${usernameInput.value} ${passwordInput.value} ${siteInput.value}", Toast.LENGTH_LONG).show()
-                val newEntry = AccountEntry(usernameInput.value, passwordInput.value, siteInput.value)
-                SampleData.passwordListSample += newEntry
+                //val newEntry = AccountEntry(usernameInput.value, passwordInput.value, siteInput.value)
+                //SampleData.passwordListSample += newEntry
             }) {
             Text(text = "Add")
         }
@@ -150,30 +148,21 @@ fun AddMenu() {
 
 
 //Given a list of AccountEntry, display each given the
-@Composable
-fun DisplayPasswordList(entries: List<AccountEntry>) {
-    LazyColumn {
-        items(entries) { entry ->
-            DisplayEntry(entry)
-        }
-    }
-}
+//@Composable
+//fun DisplayPasswordList(entries: List<Account>) {
+//    LazyColumn {
+ //       items(entries) { entry ->
+   //         DisplayEntry(entry)
+     //   }
+    //}
+//}
 
 //Displays one entry given an AccountEntry
-@Composable
-fun DisplayEntry(entry: AccountEntry) {
-    Row(modifier = Modifier.padding(all = 8.dp)) {
-        Text(text = entry.username + "   ")
-        Text(text = entry.password + "   ")
-        Text(text = entry.siteName)
-    }
-}
-
-//Preview function for DisplayPasswordList
-@Preview(showBackground = true)
-@Composable
-fun PreviewDisplayPasswordList() {
-    PasstickUITheme {
-        DisplayPasswordList(entries = SampleData.passwordListSample)
-    }
-}
+//@Composable
+//fun DisplayEntry(entry: AccountEntry) {
+  //  Row(modifier = Modifier.padding(all = 8.dp)) {
+    //    Text(text = entry.username + "   ")
+      //  Text(text = entry.password + "   ")
+        //Text(text = entry.siteName)
+    //}
+//}

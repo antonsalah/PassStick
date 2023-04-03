@@ -1,4 +1,4 @@
-package com.example.passtick.data
+package com.example.passtick.ui.data
 
 import androidx.room.*
 

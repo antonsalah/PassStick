@@ -3,7 +3,9 @@ package com.example.passtick.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
-import com.example.passtick.data.*
+import com.example.passtick.ui.data.*
+import com.example.passtick.ui.data.Account
+import com.example.passtick.ui.data.AccountDao
 import kotlinx.coroutines.flow.*
 
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
