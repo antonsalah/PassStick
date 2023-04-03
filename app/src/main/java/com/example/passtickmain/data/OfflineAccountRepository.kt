@@ -1,9 +1,11 @@
 package com.example.passtickmain.data
 import kotlinx.coroutines.flow.Flow
 
+import com.example.passtickmain.accountDao
+
 //class OfflineAccountRepository(private val accountDao: AccountDao) : AccountRepository
 
-class OfflineAccountRepository(private val accountDao: AccountDao) : AccountRepository{
+class OfflineAccountRepository(private val accountDao: accountDao) : AccountRepository{
 
     override fun getAllAccountStream(): Flow<List<Account>> = accountDao.getAllAccounts()
 
