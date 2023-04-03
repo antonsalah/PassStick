@@ -1,6 +1,4 @@
-package com.example.passtickmain
-
-import java.security.KeyStore.Entry
+package com.example.passtick
 
 object SampleData {
     // Sample conversation data

@@ -1,4 +1,4 @@
-package com.example.passtickmain
+package com.example.passtick
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,18 +12,18 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import com.example.passtickmain.ui.theme.Purple200
-import com.example.passtickmain.ui.theme.Purple500
+import com.example.passtick.ui.theme.Purple200
+import com.example.passtick.ui.theme.Purple500
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
-import com.example.passtickmain.ui.theme.Teal200
+import com.example.passtick.ui.theme.Teal200
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.Typography
-import com.example.passtickmain.ui.theme.Purple700
+import com.example.passtick.ui.theme.Purple700
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
 import androidx.compose.runtime.mutableStateOf
