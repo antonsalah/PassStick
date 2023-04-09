@@ -23,9 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,7 +38,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle.State.STARTED
 import androidx.lifecycle.repeatOnLifecycle
 import com.passtick.test.ui.theme.MyApplicationTheme
-import androidx.compose.material3.ExperimentalMaterial3Api
 import com.passtick.test.data.local.database.Account
 
 @Composable
@@ -115,22 +112,25 @@ internal fun AccountScreen(
                 placeholder = { Text(text = "Password")}
             )
 
-        }
-
-        Button(modifier = Modifier.width(96.dp), onClick = { onSave(Account(usernameAccount, passwordAccount, serviceNameAccount)) }) {
-            Text("Save")
+            Button(modifier = Modifier.width(96.dp), onClick = { onSave(Account(usernameAccount, passwordAccount, serviceNameAccount)) }) {
+                Text("Save")
+            }
         }
 
         items.forEach {
-            AccountDisplay(account = it)
-
+            AccountDisplay(account = it, modifier = Modifier)
         }
     }
 }
 
 @Composable
-private fun AccountDisplay(account: Account) {
-    Text("${account.serviceName} ${account.username} ${account.password}")
+private fun AccountDisplay(account: Account, modifier: Modifier = Modifier) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),) {
+        Text("    ${account.serviceName} ${account.username} ${account.password}    ")
+    }
 }
 
 // Previews
