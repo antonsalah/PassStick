@@ -38,6 +38,7 @@ import android.widget.Toast
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -125,6 +126,7 @@ internal fun AccountScreen(
                         )
                     )
                     listCoroutineScope.launch {
+                        delay(100)
                         listState.animateScrollToItem(index = 0)
                     }
                 }) {
@@ -140,7 +142,7 @@ fun AccountDisplay(account: Account) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp),
+                .padding(bottom = 24.dp),
         ) {
             Text("    ${account.serviceName} ${account.username} ${account.password}    ")
         }
