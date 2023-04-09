@@ -52,6 +52,11 @@ class AccountViewModel @Inject constructor(
             accountRepository.delete(accountToDelete)
         }
     }
+    fun modifyAccount(accountToModify: Account) {
+        viewModelScope.launch {
+            accountRepository.modify(accountToModify)
+        }
+    }
 }
 
 sealed interface AccountUiState {

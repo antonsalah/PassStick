@@ -35,6 +35,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import kotlinx.coroutines.delay
@@ -57,6 +58,7 @@ fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = h
             accountList = (items as AccountUiState.Success).data,
             onSave = viewModel::addAccount,
             onDelete = viewModel::deleteAccount,
+            onModify = viewModel::modifyAccount,
             modifier = modifier
         )
     }
@@ -68,6 +70,7 @@ internal fun AccountScreen(
     accountList: List<Account>,
     onSave: (account: Account) -> Unit,
     onDelete: (account: Account) -> Unit,
+    onModify: (account: Account) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column {
@@ -137,12 +140,12 @@ internal fun AccountScreen(
                 Icon(Icons.Default.Add, null)
             }
         }
-        PasswordListDisplay(accountList = accountList, state = listState, onDelete)
+        PasswordListDisplay(accountList = accountList, state = listState, onDelete, onModify)
     }
 }
 
 @Composable
-fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit,) {
+fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit, onModify: (account: Account) -> Unit) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -153,19 +156,25 @@ fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit,) {
                 Spacer(Modifier.weight(1f).fillMaxHeight())
                 Button(
                     onClick = {
+                        onModify(account)
+                    }) {
+                    Icon(Icons.Default.Edit, null)
+                }
+                Button(
+                    onClick = {
                         onDelete(account)
                     }) {
                     Icon(Icons.Default.Delete, null)
-                    }
+                }
             }
         }
 }
 @Composable
-fun PasswordListDisplay(accountList: List<Account>, state: LazyListState, onDelete: (account: Account) -> Unit,) {
+fun PasswordListDisplay(accountList: List<Account>, state: LazyListState, onDelete: (account: Account) -> Unit, onModify: (account: Account) -> Unit) {
 
     LazyColumn(state = state) {
         items(items = accountList, key = { it.uid }) { account ->
-            AccountDisplay(account = account, onDelete)
+            AccountDisplay(account = account, onDelete, onModify)
         }
     }
 }
@@ -175,7 +184,7 @@ fun PasswordListDisplay(accountList: List<Account>, state: LazyListState, onDele
 @Composable
 private fun DefaultPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {}, onDelete = {})
+        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {}, onDelete = {}, onModify = {})
     }
 }
 
@@ -183,6 +192,6 @@ private fun DefaultPreview() {
 @Composable
 private fun PortraitPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {}, onDelete = {})
+        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {}, onDelete = {}, onModify = {})
     }
 }

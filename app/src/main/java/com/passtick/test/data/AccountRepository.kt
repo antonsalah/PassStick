@@ -26,6 +26,7 @@ interface AccountRepository {
     val accounts: Flow<List<Account>>
     suspend fun delete(account: Account)
     suspend fun add(account: Account)
+    suspend fun modify(account: Account)
 }
 
 class DefaultAccountRepository @Inject constructor(
@@ -41,5 +42,9 @@ class DefaultAccountRepository @Inject constructor(
 
     override suspend fun delete(account: Account) {
         accountDao.deleteAccount(account)
+    }
+
+    override suspend fun modify(account: Account) {
+        accountDao.updateAccount(account)
     }
 }
