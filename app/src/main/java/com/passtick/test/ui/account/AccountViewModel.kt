@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import com.passtick.test.data.AccountRepository
+import com.passtick.test.data.local.database.Account
 import com.passtick.test.ui.account.AccountUiState.Error
 import com.passtick.test.ui.account.AccountUiState.Loading
 import com.passtick.test.ui.account.AccountUiState.Success
@@ -37,13 +38,13 @@ class AccountViewModel @Inject constructor(
 ) : ViewModel() {
 
     val uiState: StateFlow<AccountUiState> = accountRepository
-        .accounts.map<List<String>, AccountUiState>(::Success)
+        .accounts.map<List<Account>, AccountUiState>(::Success)
         .catch { emit(Error(it)) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), Loading)
 
-    fun addAccount(name: String) {
+    fun addAccount(accountToAdd: Account) {
         viewModelScope.launch {
-            accountRepository.add(name)
+            accountRepository.add(accountToAdd)
         }
     }
 }
@@ -51,5 +52,5 @@ class AccountViewModel @Inject constructor(
 sealed interface AccountUiState {
     object Loading : AccountUiState
     data class Error(val throwable: Throwable) : AccountUiState
-    data class Success(val data: List<String>) : AccountUiState
+    data class Success(val data: List<Account>) : AccountUiState
 }

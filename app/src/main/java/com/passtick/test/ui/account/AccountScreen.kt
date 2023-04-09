@@ -40,6 +40,7 @@ import androidx.lifecycle.Lifecycle.State.STARTED
 import androidx.lifecycle.repeatOnLifecycle
 import com.passtick.test.ui.theme.MyApplicationTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
+import com.passtick.test.data.local.database.Account
 
 @Composable
 fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = hiltViewModel()) {
@@ -65,27 +66,52 @@ fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = h
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AccountScreen(
-    items: List<String>,
-    onSave: (name: String) -> Unit,
+    items: List<Account>,
+    onSave: (account: Account) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
-        var nameAccount by remember { mutableStateOf("Compose") }
+        var usernameAccount by remember { mutableStateOf("Username") }
+        var passwordAccount by remember { mutableStateOf("Password") }
+        var serviceNameAccount by remember { mutableStateOf("ServiceName") }
         Row(
             modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TextField(
-                value = nameAccount,
-                onValueChange = { nameAccount = it }
+                value = usernameAccount,
+                onValueChange = { usernameAccount = it }
+            )
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            TextField(
+                value = passwordAccount,
+                onValueChange = { passwordAccount = it }
             )
 
-            Button(modifier = Modifier.width(96.dp), onClick = { onSave(nameAccount) }) {
-                Text("Save")
-            }
         }
+
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            TextField(
+                value = serviceNameAccount,
+                onValueChange = { serviceNameAccount = it }
+            )
+
+        }
+
+        Button(modifier = Modifier.width(96.dp), onClick = { onSave(Account(usernameAccount, passwordAccount, serviceNameAccount)) }) {
+            Text("Save")
+        }
+
         items.forEach {
-            Text("Saved item: $it")
+            Text("Saved item: ${it.username} ${it.password} ${it.serviceName}")
         }
     }
 }
@@ -96,7 +122,7 @@ internal fun AccountScreen(
 @Composable
 private fun DefaultPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf("Compose", "Room", "Kotlin"), onSave = {})
+        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {})
     }
 }
 
@@ -104,6 +130,6 @@ private fun DefaultPreview() {
 @Composable
 private fun PortraitPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf("Compose", "Room", "Kotlin"), onSave = {})
+        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {})
     }
 }

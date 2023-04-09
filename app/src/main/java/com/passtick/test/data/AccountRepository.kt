@@ -23,19 +23,19 @@ import com.passtick.test.data.local.database.AccountDao
 import javax.inject.Inject
 
 interface AccountRepository {
-    val accounts: Flow<List<String>>
+    val accounts: Flow<List<Account>>
 
-    suspend fun add(name: String)
+    suspend fun add(account: Account)
 }
 
 class DefaultAccountRepository @Inject constructor(
     private val accountDao: AccountDao
 ) : AccountRepository {
 
-    override val accounts: Flow<List<String>> =
-        accountDao.getAccounts().map { items -> items.map { it.name } }
+    override val accounts: Flow<List<Account>> =
+        accountDao.getAccounts().map { items -> items.map { it } }
 
-    override suspend fun add(name: String) {
-        accountDao.insertAccount(Account(name = name))
+    override suspend fun add(account: Account) {
+        accountDao.insertAccount(account)
     }
 }
