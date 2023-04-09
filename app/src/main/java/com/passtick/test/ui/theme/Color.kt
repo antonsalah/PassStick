@@ -18,10 +18,22 @@ package com.passtick.test.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+//Default Darkmode Colors
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
 
+//New Darkmode Colors
+val LightCyan = Color(102, 255, 255)
+val CyanGray = Color(153, 230, 255)
+val LightBlue = Color(128, 223, 255)
+
+//Default Lightmode Colors
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+//New Lightmode Colors
+val DarkCyan = Color(0, 153, 204)
+val DarkBlueGray = Color(0, 51, 102)
+val Cyan = Color(0, 204, 255)

@@ -22,9 +22,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,8 +39,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle.State.STARTED
 import androidx.lifecycle.repeatOnLifecycle
 import com.passtick.test.ui.theme.MyApplicationTheme
-import androidx.compose.material3.ExperimentalMaterial3Api
 import com.passtick.test.data.local.database.Account
+import android.widget.Toast
 
 @Composable
 fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = hiltViewModel()) {
@@ -56,7 +56,7 @@ fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = h
     }
     if (items is AccountUiState.Success) {
         AccountScreen(
-            items = (items as AccountUiState.Success).data,
+            accountList = (items as AccountUiState.Success).data,
             onSave = viewModel::addAccount,
             modifier = modifier
         )
@@ -66,58 +66,92 @@ fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = h
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AccountScreen(
-    items: List<Account>,
+    accountList: List<Account>,
     onSave: (account: Account) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier) {
-        var usernameAccount by remember { mutableStateOf("Username") }
-        var passwordAccount by remember { mutableStateOf("Password") }
-        var serviceNameAccount by remember { mutableStateOf("ServiceName") }
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextField(
-                value = usernameAccount,
-                onValueChange = { usernameAccount = it }
-            )
-        }
+    Column() {
+        var usernameAccount by remember { mutableStateOf("") }
+        var passwordAccount by remember { mutableStateOf("") }
+        var serviceNameAccount by remember { mutableStateOf("") }
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextField(
-                value = passwordAccount,
-                onValueChange = { passwordAccount = it }
-            )
-
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TextField(
                 value = serviceNameAccount,
-                onValueChange = { serviceNameAccount = it }
+                onValueChange = { serviceNameAccount = it },
+                placeholder = { Text(text = "Service Name") }
             )
 
         }
 
-        Button(modifier = Modifier.width(96.dp), onClick = { onSave(Account(usernameAccount, passwordAccount, serviceNameAccount)) }) {
-            Text("Save")
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            TextField(
+                value = usernameAccount,
+                onValueChange = { usernameAccount = it },
+                placeholder = { Text(text = "Username") }
+            )
         }
 
-        items.forEach {
-            Text("Saved item: ${it.username} ${it.password} ${it.serviceName}")
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            TextField(
+                value = passwordAccount,
+                onValueChange = { passwordAccount = it },
+                placeholder = { Text(text = "Password") }
+            )
+
+            Button(
+                modifier = Modifier.width(96.dp),
+                onClick = {
+                    onSave(
+                        Account(
+                            usernameAccount,
+                            passwordAccount,
+                            serviceNameAccount
+                        )
+                    )
+                }) {
+                Text("Save")
+            }
+        }
+        PasswordListDisplay(accountList = accountList)
+    }
+}
+
+@Composable
+fun AccountDisplay(account: Account) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+        ) {
+            Text("    ${account.serviceName} ${account.username} ${account.password}    ")
+        }
+}
+@Composable
+fun PasswordListDisplay(accountList: List<Account>) {
+    LazyColumn {
+        items(items = accountList, key = { it.uid }) { account ->
+            AccountDisplay(account = account)
         }
     }
 }
 
 // Previews
-
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
