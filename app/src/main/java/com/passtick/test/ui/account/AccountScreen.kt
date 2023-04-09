@@ -16,12 +16,6 @@
 
 package com.passtick.test.ui.account
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
@@ -35,9 +29,14 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.passtick.test.ui.theme.MyApplicationTheme
 import com.passtick.test.data.local.database.Account
 import android.widget.Toast
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import kotlinx.coroutines.launch
 
 @Composable
@@ -130,7 +129,7 @@ internal fun AccountScreen(
                         listState.animateScrollToItem(index = 0)
                     }
                 }) {
-                Text("Save")
+                Icon(Icons.Default.Add, null)
             }
         }
         PasswordListDisplay(accountList = accountList, state = listState, onDelete)
@@ -144,15 +143,15 @@ fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit,) {
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
         ) {
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("    ${account.serviceName} ${account.username} ${account.password}    ")
+                Spacer(Modifier.weight(1f).fillMaxHeight())
                 Button(
                     onClick = {
                         onDelete(account)
-                }) {
-                    Text("Delete")
-
-                }
+                    }) {
+                    Icon(Icons.Default.Delete, null)
+                    }
             }
         }
 }
