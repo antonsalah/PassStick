@@ -37,6 +37,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -129,6 +130,7 @@ internal fun AccountScreen(
                     passwordAccount = ""
                     serviceNameAccount = ""
                     listCoroutineScope.launch {
+                        delay(100)
                         listState.animateScrollToItem(index = 0)
                     }
                 }) {
@@ -144,7 +146,7 @@ fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit,) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp),
+                .padding(bottom = 24.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("    ${account.serviceName} ${account.username} ${account.password}    ")
