@@ -42,6 +42,9 @@ interface DataModule {
 class FakeAccountRepository @Inject constructor() : AccountRepository {
     override val accounts: Flow<List<Account>> = flowOf(fakeAccounts)
 
+    override suspend fun delete(account: Account) {
+        throw NotImplementedError()
+    }
     override suspend fun add(account: Account) {
         throw NotImplementedError()
     }

@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 interface AccountRepository {
     val accounts: Flow<List<Account>>
-
+    suspend fun delete(account: Account)
     suspend fun add(account: Account)
 }
 
@@ -37,5 +37,9 @@ class DefaultAccountRepository @Inject constructor(
 
     override suspend fun add(account: Account) {
         accountDao.insertAccount(account)
+    }
+
+    override suspend fun delete(account: Account) {
+        accountDao.deleteAccount(account)
     }
 }
