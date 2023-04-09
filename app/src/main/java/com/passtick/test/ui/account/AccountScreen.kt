@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -71,37 +72,47 @@ internal fun AccountScreen(
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
-        var usernameAccount by remember { mutableStateOf("Username") }
-        var passwordAccount by remember { mutableStateOf("Password") }
-        var serviceNameAccount by remember { mutableStateOf("ServiceName") }
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextField(
-                value = usernameAccount,
-                onValueChange = { usernameAccount = it }
-            )
-        }
+        var usernameAccount by remember { mutableStateOf("") }
+        var passwordAccount by remember { mutableStateOf("") }
+        var serviceNameAccount by remember { mutableStateOf("") }
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextField(
-                value = passwordAccount,
-                onValueChange = { passwordAccount = it }
-            )
-
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TextField(
                 value = serviceNameAccount,
-                onValueChange = { serviceNameAccount = it }
+                onValueChange = { serviceNameAccount = it },
+                placeholder = { Text(text = "Service Name")}
+            )
+
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            TextField(
+                value = usernameAccount,
+                onValueChange = { usernameAccount = it },
+                placeholder = { Text(text = "Username")}
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            TextField(
+                value = passwordAccount,
+                onValueChange = { passwordAccount = it },
+                placeholder = { Text(text = "Password")}
             )
 
         }
@@ -111,9 +122,15 @@ internal fun AccountScreen(
         }
 
         items.forEach {
-            Text("Saved item: ${it.username} ${it.password} ${it.serviceName}")
+            AccountDisplay(account = it)
+
         }
     }
+}
+
+@Composable
+private fun AccountDisplay(account: Account) {
+    Text("${account.serviceName} ${account.username} ${account.password}")
 }
 
 // Previews
