@@ -73,6 +73,7 @@ internal fun AccountScreen(
     Column(modifier) {
         var usernameAccount by remember { mutableStateOf("Username") }
         var passwordAccount by remember { mutableStateOf("Password") }
+        var serviceNameAccount by remember { mutableStateOf("ServiceName") }
         Row(
             modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -94,7 +95,18 @@ internal fun AccountScreen(
 
         }
 
-        Button(modifier = Modifier.width(96.dp), onClick = { onSave(Account(usernameAccount, passwordAccount, "serviceName")) }) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            TextField(
+                value = serviceNameAccount,
+                onValueChange = { serviceNameAccount = it }
+            )
+
+        }
+
+        Button(modifier = Modifier.width(96.dp), onClick = { onSave(Account(usernameAccount, passwordAccount, serviceNameAccount)) }) {
             Text("Save")
         }
 
