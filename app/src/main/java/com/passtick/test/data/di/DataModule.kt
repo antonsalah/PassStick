@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import com.passtick.test.data.AccountRepository
 import com.passtick.test.data.DefaultAccountRepository
+import com.passtick.test.data.local.database.Account
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -39,11 +40,11 @@ interface DataModule {
 }
 
 class FakeAccountRepository @Inject constructor() : AccountRepository {
-    override val accounts: Flow<List<String>> = flowOf(fakeAccounts)
+    override val accounts: Flow<List<Account>> = flowOf(fakeAccounts)
 
-    override suspend fun add(name: String) {
+    override suspend fun add(username: String, password: String, serviceName: String) {
         throw NotImplementedError()
     }
 }
 
-val fakeAccounts = listOf("One", "Two", "Three")
+val fakeAccounts = listOf(Account("One", "Two", "Three"))

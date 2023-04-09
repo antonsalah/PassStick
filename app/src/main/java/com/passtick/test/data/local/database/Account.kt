@@ -32,7 +32,7 @@ data class Account(
 @Dao
 interface AccountDao {
     @Query("SELECT * FROM account ORDER BY uid DESC LIMIT 10")
-    fun getAccounts(): Flow<List<Account>>
+    fun getAccounts(): Flow<List<String>>
 
     @Insert
     suspend fun insertAccount(item: Account)

@@ -70,17 +70,32 @@ internal fun AccountScreen(
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
-        var nameAccount by remember { mutableStateOf("Compose") }
+        var usernameAccount by remember { mutableStateOf("Username") }
+        var passwordAccount by remember { mutableStateOf("Password") }
         Row(
             modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TextField(
-                value = nameAccount,
-                onValueChange = { nameAccount = it }
+                value = usernameAccount,
+                onValueChange = { usernameAccount = it }
             )
 
-            Button(modifier = Modifier.width(96.dp), onClick = { onSave(nameAccount) }) {
+            Button(modifier = Modifier.width(96.dp), onClick = { onSave(usernameAccount) }) {
+                Text("Save")
+            }
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            TextField(
+                value = passwordAccount,
+                onValueChange = { passwordAccount = it }
+            )
+
+            Button(modifier = Modifier.width(96.dp), onClick = { onSave(passwordAccount) }) {
                 Text("Save")
             }
         }
