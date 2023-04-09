@@ -56,6 +56,7 @@ fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = h
         AccountScreen(
             accountList = (items as AccountUiState.Success).data,
             onSave = viewModel::addAccount,
+            onDelete = viewModel::deleteAccount,
             modifier = modifier
         )
     }
@@ -66,6 +67,7 @@ fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = h
 internal fun AccountScreen(
     accountList: List<Account>,
     onSave: (account: Account) -> Unit,
+    onDelete: (account: Account) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column {
@@ -131,26 +133,35 @@ internal fun AccountScreen(
                 Text("Save")
             }
         }
-        PasswordListDisplay(accountList = accountList, state = listState)
+        PasswordListDisplay(accountList = accountList, state = listState, onDelete)
     }
 }
 
 @Composable
-fun AccountDisplay(account: Account) {
+fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit,) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
         ) {
-            Text("    ${account.serviceName} ${account.username} ${account.password}    ")
+            Row {
+                Text("    ${account.serviceName} ${account.username} ${account.password}    ")
+                Button(
+                    onClick = {
+                        onDelete(account)
+                }) {
+                    Text("Delete")
+
+                }
+            }
         }
 }
 @Composable
-fun PasswordListDisplay(accountList: List<Account>, state: LazyListState) {
+fun PasswordListDisplay(accountList: List<Account>, state: LazyListState, onDelete: (account: Account) -> Unit,) {
 
     LazyColumn(state = state) {
         items(items = accountList, key = { it.uid }) { account ->
-            AccountDisplay(account = account)
+            AccountDisplay(account = account, onDelete)
         }
     }
 }
@@ -160,7 +171,7 @@ fun PasswordListDisplay(accountList: List<Account>, state: LazyListState) {
 @Composable
 private fun DefaultPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {})
+        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {}, onDelete = {})
     }
 }
 
@@ -168,6 +179,6 @@ private fun DefaultPreview() {
 @Composable
 private fun PortraitPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {})
+        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {}, onDelete = {})
     }
 }
