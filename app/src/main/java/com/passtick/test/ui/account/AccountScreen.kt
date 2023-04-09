@@ -149,14 +149,32 @@ fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit,) {
                 .padding(bottom = 24.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("    ${account.serviceName} ${account.username} ${account.password}    ")
-                Spacer(Modifier.weight(1f).fillMaxHeight())
-                Button(
-                    onClick = {
-                        onDelete(account)
-                    }) {
-                    Icon(Icons.Default.Delete, null)
+                Column(modifier = Modifier.weight(10f)) {
+                    Row {
+                        Text(
+                            "    Service: ${account.serviceName}    ",
+                        )
                     }
+                    Row {
+                        Text(
+                            "    Username: ${account.username}    ",
+                        )
+                    }
+                    Row {
+                        Text(
+                            "    Password: ${account.password}    ",
+                        )
+                    }
+                }
+                Spacer(Modifier.weight(1f).fillMaxHeight())
+                Column {
+                    Button(
+                        onClick = {
+                            onDelete(account)
+                        }) {
+                        Icon(Icons.Default.Delete, null)
+                    }
+                }
             }
         }
 }
