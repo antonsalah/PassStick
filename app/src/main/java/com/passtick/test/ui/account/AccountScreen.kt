@@ -125,6 +125,9 @@ internal fun AccountScreen(
                             serviceNameAccount
                         )
                     )
+                    usernameAccount = ""
+                    passwordAccount = ""
+                    serviceNameAccount = ""
                     listCoroutineScope.launch {
                         listState.animateScrollToItem(index = 0)
                     }
