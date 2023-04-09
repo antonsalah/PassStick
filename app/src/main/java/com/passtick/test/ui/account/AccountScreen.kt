@@ -16,21 +16,9 @@
 
 package com.passtick.test.ui.account
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +29,16 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.passtick.test.ui.theme.MyApplicationTheme
 import com.passtick.test.data.local.database.Account
 import android.widget.Toast
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = hiltViewModel()) {
@@ -58,6 +56,7 @@ fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = h
         AccountScreen(
             accountList = (items as AccountUiState.Success).data,
             onSave = viewModel::addAccount,
+            onDelete = viewModel::deleteAccount,
             modifier = modifier
         )
     }
@@ -68,12 +67,15 @@ fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = h
 internal fun AccountScreen(
     accountList: List<Account>,
     onSave: (account: Account) -> Unit,
+    onDelete: (account: Account) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column() {
+    Column {
         var usernameAccount by remember { mutableStateOf("") }
         var passwordAccount by remember { mutableStateOf("") }
         var serviceNameAccount by remember { mutableStateOf("") }
+        val listState = rememberLazyListState()
+        val listCoroutineScope = rememberCoroutineScope()
 
         Row(
             modifier = Modifier
@@ -124,29 +126,46 @@ internal fun AccountScreen(
                             serviceNameAccount
                         )
                     )
+                    usernameAccount = ""
+                    passwordAccount = ""
+                    serviceNameAccount = ""
+                    listCoroutineScope.launch {
+                        delay(100)
+                        listState.animateScrollToItem(index = 0)
+                    }
                 }) {
-                Text("Save")
+                Icon(Icons.Default.Add, null)
             }
         }
-        PasswordListDisplay(accountList = accountList)
+        PasswordListDisplay(accountList = accountList, state = listState, onDelete)
     }
 }
 
 @Composable
-fun AccountDisplay(account: Account) {
+fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit,) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp),
+                .padding(bottom = 24.dp),
         ) {
-            Text("    ${account.serviceName} ${account.username} ${account.password}    ")
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("    ${account.serviceName} ${account.username} ${account.password}    ")
+                Spacer(Modifier.weight(1f).fillMaxHeight())
+                Button(
+                    onClick = {
+                        onDelete(account)
+                    }) {
+                    Icon(Icons.Default.Delete, null)
+                    }
+            }
         }
 }
 @Composable
-fun PasswordListDisplay(accountList: List<Account>) {
-    LazyColumn {
+fun PasswordListDisplay(accountList: List<Account>, state: LazyListState, onDelete: (account: Account) -> Unit,) {
+
+    LazyColumn(state = state) {
         items(items = accountList, key = { it.uid }) { account ->
-            AccountDisplay(account = account)
+            AccountDisplay(account = account, onDelete)
         }
     }
 }
@@ -156,7 +175,7 @@ fun PasswordListDisplay(accountList: List<Account>) {
 @Composable
 private fun DefaultPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {})
+        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {}, onDelete = {})
     }
 }
 
@@ -164,6 +183,6 @@ private fun DefaultPreview() {
 @Composable
 private fun PortraitPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {})
+        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {}, onDelete = {})
     }
 }
