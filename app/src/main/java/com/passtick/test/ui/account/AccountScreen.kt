@@ -40,6 +40,7 @@ import androidx.lifecycle.Lifecycle.State.STARTED
 import androidx.lifecycle.repeatOnLifecycle
 import com.passtick.test.ui.theme.MyApplicationTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
+import com.passtick.test.data.local.database.Account
 
 @Composable
 fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = hiltViewModel()) {
@@ -65,8 +66,8 @@ fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = h
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AccountScreen(
-    items: List<String>,
-    onSave: (name: String) -> Unit,
+    items: List<Account>,
+    onSave: (account: Account) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
@@ -80,10 +81,6 @@ internal fun AccountScreen(
                 value = usernameAccount,
                 onValueChange = { usernameAccount = it }
             )
-
-            Button(modifier = Modifier.width(96.dp), onClick = { onSave(usernameAccount) }) {
-                Text("Save")
-            }
         }
 
         Row(
@@ -95,12 +92,14 @@ internal fun AccountScreen(
                 onValueChange = { passwordAccount = it }
             )
 
-            Button(modifier = Modifier.width(96.dp), onClick = { onSave(passwordAccount) }) {
-                Text("Save")
-            }
         }
+
+        Button(modifier = Modifier.width(96.dp), onClick = { onSave(Account(usernameAccount, passwordAccount, "serviceName")) }) {
+            Text("Save")
+        }
+
         items.forEach {
-            Text("Saved item: $it")
+            Text("Saved item: ${it.username} ${it.password} ${it.serviceName}")
         }
     }
 }
@@ -111,7 +110,7 @@ internal fun AccountScreen(
 @Composable
 private fun DefaultPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf("Compose", "Room", "Kotlin"), onSave = {})
+        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {})
     }
 }
 
@@ -119,6 +118,6 @@ private fun DefaultPreview() {
 @Composable
 private fun PortraitPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf("Compose", "Room", "Kotlin"), onSave = {})
+        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {})
     }
 }

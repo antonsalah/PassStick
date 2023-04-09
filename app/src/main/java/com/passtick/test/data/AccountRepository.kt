@@ -25,7 +25,7 @@ import javax.inject.Inject
 interface AccountRepository {
     val accounts: Flow<List<Account>>
 
-    suspend fun add(username: String, password: String, serviceName: String)
+    suspend fun add(account: Account)
 }
 
 class DefaultAccountRepository @Inject constructor(
@@ -33,9 +33,9 @@ class DefaultAccountRepository @Inject constructor(
 ) : AccountRepository {
 
     override val accounts: Flow<List<Account>> =
-        accountDao.getAccounts().map { items -> items.map { Account(it.username, it.password, it.serviceName) } }
+        accountDao.getAccounts().map { items -> items.map { it } }
 
-    override suspend fun add(username: String, password: String, serviceName: String) {
-        accountDao.insertAccount(Account(username, password, serviceName))
+    override suspend fun add(account: Account) {
+        accountDao.insertAccount(account)
     }
 }

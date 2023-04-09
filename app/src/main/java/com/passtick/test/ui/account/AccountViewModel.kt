@@ -42,9 +42,9 @@ class AccountViewModel @Inject constructor(
         .catch { emit(Error(it)) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), Loading)
 
-    fun addAccount(username: String, password: String, serviceName: String) {
+    fun addAccount(accountToAdd: Account) {
         viewModelScope.launch {
-            accountRepository.add(username, password, serviceName)
+            accountRepository.add(accountToAdd)
         }
     }
 }
