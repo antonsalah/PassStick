@@ -25,12 +25,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +35,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.passtick.test.ui.theme.MyApplicationTheme
 import com.passtick.test.data.local.database.Account
 import android.widget.Toast
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.*
+import kotlinx.coroutines.launch
 
 @Composable
 fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = hiltViewModel()) {
@@ -70,10 +68,12 @@ internal fun AccountScreen(
     onSave: (account: Account) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column() {
+    Column {
         var usernameAccount by remember { mutableStateOf("") }
         var passwordAccount by remember { mutableStateOf("") }
         var serviceNameAccount by remember { mutableStateOf("") }
+        val listState = rememberLazyListState()
+        val listCoroutineScope = rememberCoroutineScope()
 
         Row(
             modifier = Modifier
@@ -124,11 +124,14 @@ internal fun AccountScreen(
                             serviceNameAccount
                         )
                     )
+                    listCoroutineScope.launch {
+                        listState.animateScrollToItem(index = 0)
+                    }
                 }) {
                 Text("Save")
             }
         }
-        PasswordListDisplay(accountList = accountList)
+        PasswordListDisplay(accountList = accountList, state = listState)
     }
 }
 
@@ -143,8 +146,9 @@ fun AccountDisplay(account: Account) {
         }
 }
 @Composable
-fun PasswordListDisplay(accountList: List<Account>) {
-    LazyColumn {
+fun PasswordListDisplay(accountList: List<Account>, state: LazyListState) {
+
+    LazyColumn(state = state) {
         items(items = accountList, key = { it.uid }) { account ->
             AccountDisplay(account = account)
         }
