@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,6 +40,7 @@ import androidx.lifecycle.Lifecycle.State.STARTED
 import androidx.lifecycle.repeatOnLifecycle
 import com.passtick.test.ui.theme.MyApplicationTheme
 import com.passtick.test.data.local.database.Account
+import android.widget.Toast
 
 @Composable
 fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = hiltViewModel()) {
@@ -54,7 +56,7 @@ fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = h
     }
     if (items is AccountUiState.Success) {
         AccountScreen(
-            items = (items as AccountUiState.Success).data,
+            accountList = (items as AccountUiState.Success).data,
             onSave = viewModel::addAccount,
             modifier = modifier
         )
@@ -64,11 +66,11 @@ fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = h
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AccountScreen(
-    items: List<Account>,
+    accountList: List<Account>,
     onSave: (account: Account) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier) {
+    Column() {
         var usernameAccount by remember { mutableStateOf("") }
         var passwordAccount by remember { mutableStateOf("") }
         var serviceNameAccount by remember { mutableStateOf("") }
@@ -82,7 +84,7 @@ internal fun AccountScreen(
             TextField(
                 value = serviceNameAccount,
                 onValueChange = { serviceNameAccount = it },
-                placeholder = { Text(text = "Service Name")}
+                placeholder = { Text(text = "Service Name") }
             )
 
         }
@@ -96,7 +98,7 @@ internal fun AccountScreen(
             TextField(
                 value = usernameAccount,
                 onValueChange = { usernameAccount = it },
-                placeholder = { Text(text = "Username")}
+                placeholder = { Text(text = "Username") }
             )
         }
 
@@ -109,32 +111,47 @@ internal fun AccountScreen(
             TextField(
                 value = passwordAccount,
                 onValueChange = { passwordAccount = it },
-                placeholder = { Text(text = "Password")}
+                placeholder = { Text(text = "Password") }
             )
 
-            Button(modifier = Modifier.width(96.dp), onClick = { onSave(Account(usernameAccount, passwordAccount, serviceNameAccount)) }) {
+            Button(
+                modifier = Modifier.width(96.dp),
+                onClick = {
+                    onSave(
+                        Account(
+                            usernameAccount,
+                            passwordAccount,
+                            serviceNameAccount
+                        )
+                    )
+                }) {
                 Text("Save")
             }
         }
-
-        items.forEach {
-            AccountDisplay(account = it, modifier = Modifier)
-        }
+        PasswordListDisplay(accountList = accountList)
     }
 }
 
 @Composable
-private fun AccountDisplay(account: Account, modifier: Modifier = Modifier) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),) {
-        Text("    ${account.serviceName} ${account.username} ${account.password}    ")
+fun AccountDisplay(account: Account) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+        ) {
+            Text("    ${account.serviceName} ${account.username} ${account.password}    ")
+        }
+}
+@Composable
+fun PasswordListDisplay(accountList: List<Account>) {
+    LazyColumn {
+        items(items = accountList, key = { it.uid }) { account ->
+            AccountDisplay(account = account)
+        }
     }
 }
 
 // Previews
-
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {

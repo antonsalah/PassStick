@@ -31,7 +31,7 @@ data class Account(
 
 @Dao
 interface AccountDao {
-    @Query("SELECT * FROM account ORDER BY uid DESC LIMIT 10")
+    @Query("SELECT * FROM account ORDER BY uid DESC LIMIT 1000")
     fun getAccounts(): Flow<List<Account>>
 
     @Insert
