@@ -38,6 +38,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -71,54 +72,46 @@ internal fun AccountScreen(
     onDelete: (account: Account) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val listState = rememberLazyListState()
+    val listCoroutineScope = rememberCoroutineScope()
+    val openAddDialogue = remember { mutableStateOf(false) }
+
     Column {
-        var usernameAccount by remember { mutableStateOf("") }
-        var passwordAccount by remember { mutableStateOf("") }
-        var serviceNameAccount by remember { mutableStateOf("") }
-        val listState = rememberLazyListState()
-        val listCoroutineScope = rememberCoroutineScope()
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextField(
-                value = serviceNameAccount,
-                onValueChange = { serviceNameAccount = it },
-                placeholder = { Text(text = "Service Name") }
-            )
-
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextField(
-                value = usernameAccount,
-                onValueChange = { usernameAccount = it },
-                placeholder = { Text(text = "Username") }
+        if (openAddDialogue.value) {
+            AddAccountDialogue(
+                onSave = onSave,
+                openAddDialogue = openAddDialogue,
+                listCoroutineScope = listCoroutineScope,
+                listState = listState
             )
         }
+        Button(
+            modifier = Modifier.width(96.dp),
+            onClick = {
+                openAddDialogue.value = true
+            }) {
+            Icon(Icons.Default.Add, null)
+        }
+        PasswordListDisplay(accountList = accountList, state = listState, onDelete)
+    }
+}
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextField(
-                value = passwordAccount,
-                onValueChange = { passwordAccount = it },
-                placeholder = { Text(text = "Password") }
-            )
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddAccountDialogue(
+    onSave: (account: Account) -> Unit,
+    openAddDialogue: MutableState<Boolean>,
+    listCoroutineScope: CoroutineScope,
+    listState: LazyListState
+) {
+    var usernameAccount by remember { mutableStateOf("") }
+    var passwordAccount by remember { mutableStateOf("") }
+    var serviceNameAccount by remember { mutableStateOf("") }
 
-            Button(
-                modifier = Modifier.width(96.dp),
+    AlertDialog(
+        onDismissRequest = { openAddDialogue.value = false },
+        confirmButton = {
+            TextButton(
                 onClick = {
                     onSave(
                         Account(
@@ -134,14 +127,71 @@ internal fun AccountScreen(
                         delay(100)
                         listState.animateScrollToItem(index = 0)
                     }
-                }) {
-                Icon(Icons.Default.Add, null)
+                    openAddDialogue.value = false
+                }
+            ) {
+                Text("Add")
             }
-        }
-        PasswordListDisplay(accountList = accountList, state = listState, onDelete)
-    }
-}
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    openAddDialogue.value = false
+                }
+            ) {
+                Text("Exit")
+            }
+        },
+        text = {
+            Column{
 
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    TextField(
+                        value = serviceNameAccount,
+                        onValueChange = { serviceNameAccount = it },
+                        placeholder = { Text(text = "Service Name") }
+                    )
+
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    TextField(
+                        value = usernameAccount,
+                        onValueChange = { usernameAccount = it },
+                        placeholder = { Text(text = "Username") }
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    TextField(
+                        value = passwordAccount,
+                        onValueChange = { passwordAccount = it },
+                        placeholder = { Text(text = "Password") }
+                    )
+
+
+                }
+                }
+
+            }
+)
+}
 @Composable
 fun ViewPasswordDialogue(account: Account, openPasswordDialogue: MutableState<Boolean>) {
         AlertDialog(
