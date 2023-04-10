@@ -33,10 +33,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -142,7 +143,46 @@ internal fun AccountScreen(
 }
 
 @Composable
+fun ViewPasswordDialogue(account: Account, openPasswordDialogue: MutableState<Boolean>) {
+        AlertDialog(
+            onDismissRequest = { openPasswordDialogue.value = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        openPasswordDialogue.value = false
+                    }
+                ) {
+                    Text("Exit")
+                }
+            },
+            text = {
+                Column{
+                    Row{
+                        Icon(Icons.Default.AccountBox, null)
+                        Text("Service: ${account.serviceName}", fontSize = 24.sp)
+                    }
+                    Row{
+                        Icon(Icons.Default.Person, null)
+                        Text("Username: ${account.username}", fontSize = 24.sp)
+                    }
+                    Row{
+                        Icon(Icons.Default.Lock, null)
+                        Text("Password: ${account.password}", fontSize = 24.sp)
+                    }
+
+                }
+
+            }
+        )
+    }
+
+@Composable
 fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit,) {
+    val openPasswordDialogue = remember { mutableStateOf(false) }
+    if (openPasswordDialogue.value) {
+        ViewPasswordDialogue(account = account, openPasswordDialogue)
+    }
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -151,28 +191,34 @@ fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit,) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(10f)) {
                     Row {
+                        Icon(Icons.Default.AccountBox, null)
                         Text(
-                            "    Service: ${account.serviceName}    ",
+                            " Service: ${account.serviceName}    ",
                         )
                     }
                     Row {
+                        Icon(Icons.Default.Person, null)
                         Text(
-                            "    Username: ${account.username}    ",
-                        )
-                    }
-                    Row {
-                        Text(
-                            "    Password: ${account.password}    ",
+                            " Username: ${account.username}    ",
                         )
                     }
                 }
-                Spacer(Modifier.weight(1f).fillMaxHeight())
+                Spacer(
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight())
                 Column {
                     Button(
                         onClick = {
                             onDelete(account)
                         }) {
                         Icon(Icons.Default.Delete, null)
+                    }
+                    Button(
+                        onClick = {
+                            openPasswordDialogue.value = true
+                        }) {
+                        Icon(Icons.Default.Info, null)
                     }
                 }
             }
@@ -187,7 +233,6 @@ fun PasswordListDisplay(accountList: List<Account>, state: LazyListState, onDele
         }
     }
 }
-
 // Previews
 @Preview(showBackground = true)
 @Composable
