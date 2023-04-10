@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -33,8 +32,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -166,44 +163,9 @@ internal fun AccountScreen(
             PasswordListDisplay(accountList = accountList, state = listState, onDelete, onModify)
 
         }
-        /*
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            FloatingActionButton(
-                onClick = { /* do something */ },
-                shape = CircleShape,
-            ) {
-                Icon(Icons.Filled.Add, "Localized description")
-            }
-        }
-        */
     }
 
 }
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ScaffoldSample(){
-    Scaffold(
-        topBar = { },
-        bottomBar = { },
-        floatingActionButtonPosition = FabPosition.End
-    ) {
-        FloatingActionButton(
-            onClick = { /* do something */ },
-            shape = CircleShape,
-        ) {
-            Icon(Icons.Filled.Add, "Localized description")
-        }
-    }
-
-}
-
 
 @Composable
 fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit, onModify: (account: Account) -> Unit) {
