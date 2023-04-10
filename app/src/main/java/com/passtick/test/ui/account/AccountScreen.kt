@@ -17,13 +17,12 @@
 package com.passtick.test.ui.account
 
 import android.annotation.SuppressLint
-import android.graphics.Color
-import android.graphics.Color.CYAN
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -33,6 +32,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -69,6 +69,7 @@ fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = h
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AccountScreen(
@@ -78,93 +79,124 @@ internal fun AccountScreen(
     onModify: (account: Account) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column {
-        var usernameAccount by remember { mutableStateOf("") }
-        var passwordAccount by remember { mutableStateOf("") }
-        var serviceNameAccount by remember { mutableStateOf("") }
-        val listState = rememberLazyListState()
-        val listCoroutineScope = rememberCoroutineScope()
+    Scaffold(
+        bottomBar = { BottomAppBar(
+            actions = { },
+            containerColor = Color(0),
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { /* do something */ },
+                    containerColor = Color(0x00,0x99,0xcc, 0xff),
+                    shape = CircleShape,
+                    elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                ) {
+                    Icon(Icons.Filled.Add, "Localized description")
+                }
+            }
+        )},
+        //floatingActionButtonPosition = FabPosition.End
+    ) {
+        Column {
+            var usernameAccount by remember { mutableStateOf("") }
+            var passwordAccount by remember { mutableStateOf("") }
+            var serviceNameAccount by remember { mutableStateOf("") }
+            val listState = rememberLazyListState()
+            val listCoroutineScope = rememberCoroutineScope()
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 24.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                TextField(
+                    value = serviceNameAccount,
+                    onValueChange = { serviceNameAccount = it },
+                    placeholder = { Text(text = "Service Name") }
+                )
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextField(
-                value = serviceNameAccount,
-                onValueChange = { serviceNameAccount = it },
-                placeholder = { Text(text = "Service Name") }
-            )
+            }
 
-        }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 24.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                TextField(
+                    value = usernameAccount,
+                    onValueChange = { usernameAccount = it },
+                    placeholder = { Text(text = "Username") }
+                )
+            }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextField(
-                value = usernameAccount,
-                onValueChange = { usernameAccount = it },
-                placeholder = { Text(text = "Username") }
-            )
-        }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 24.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                TextField(
+                    value = passwordAccount,
+                    onValueChange = { passwordAccount = it },
+                    placeholder = { Text(text = "Password") }
+                )
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextField(
-                value = passwordAccount,
-                onValueChange = { passwordAccount = it },
-                placeholder = { Text(text = "Password") }
-            )
-
-            Button(
-                modifier = Modifier.width(96.dp),
-                onClick = {
-                    onSave(
-                        Account(
-                            usernameAccount,
-                            passwordAccount,
-                            serviceNameAccount
+                Button(
+                    modifier = Modifier.width(96.dp),
+                    onClick = {
+                        onSave(
+                            Account(
+                                usernameAccount,
+                                passwordAccount,
+                                serviceNameAccount
+                            )
                         )
-                    )
-                    usernameAccount = ""
-                    passwordAccount = ""
-                    serviceNameAccount = ""
-                    listCoroutineScope.launch {
-                        delay(100)
-                        listState.animateScrollToItem(index = 0)
-                    }
-                }) {
-                Icon(Icons.Default.Add, null)
+                        usernameAccount = ""
+                        passwordAccount = ""
+                        serviceNameAccount = ""
+                        listCoroutineScope.launch {
+                            delay(100)
+                            listState.animateScrollToItem(index = 0)
+                        }
+                    }) {
+                    Icon(Icons.Default.Add, null)
+                }
+            }
+
+            PasswordListDisplay(accountList = accountList, state = listState, onDelete, onModify)
+
+        }
+        /*
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            FloatingActionButton(
+                onClick = { /* do something */ },
+                shape = CircleShape,
+            ) {
+                Icon(Icons.Filled.Add, "Localized description")
             }
         }
-        PasswordListDisplay(accountList = accountList, state = listState, onDelete, onModify)
-
-        ScaffoldSample()
+        */
     }
+
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScaffoldSample(){
-
     Scaffold(
         topBar = { },
         bottomBar = { },
-        floatingActionButtonPosition = FabPosition.Center
+        floatingActionButtonPosition = FabPosition.End
     ) {
-
-        //
         FloatingActionButton(
             onClick = { /* do something */ },
+            shape = CircleShape,
         ) {
             Icon(Icons.Filled.Add, "Localized description")
         }
@@ -182,7 +214,10 @@ fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit, onMod
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("    ${account.serviceName} ${account.username} ${account.password}    ")
-                Spacer(Modifier.weight(1f).fillMaxHeight())
+                Spacer(
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight())
                 Button(
                     onClick = {
                         onModify(account)
