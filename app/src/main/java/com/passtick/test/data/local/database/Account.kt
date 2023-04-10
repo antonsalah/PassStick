@@ -21,9 +21,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Entity
 data class Account(
-    val username: String,
-    val password: String,
-    val serviceName: String
+    var username: String,
+    var password: String,
+    var serviceName: String
 ) {
     @PrimaryKey(autoGenerate = true)
     var uid: Int = 0
