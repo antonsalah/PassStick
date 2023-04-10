@@ -159,15 +159,15 @@ fun ViewPasswordDialogue(account: Account, openPasswordDialogue: MutableState<Bo
                 Column{
                     Row{
                         Icon(Icons.Default.AccountBox, null)
-                        Text("Service: ${account.serviceName}", fontSize = 24.sp)
+                        Text("Service: \n \n ${account.serviceName} \n", fontSize = 24.sp)
                     }
                     Row{
                         Icon(Icons.Default.Person, null)
-                        Text("Username: ${account.username}", fontSize = 24.sp)
+                        Text("Username: \n \n ${account.username} \n", fontSize = 24.sp)
                     }
                     Row{
                         Icon(Icons.Default.Lock, null)
-                        Text("Password: ${account.password}", fontSize = 24.sp)
+                        Text("Password: \n \n ${account.password} \n", fontSize = 24.sp)
                     }
 
                 }
