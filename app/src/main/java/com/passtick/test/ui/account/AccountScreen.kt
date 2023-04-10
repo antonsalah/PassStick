@@ -33,10 +33,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -70,54 +72,46 @@ internal fun AccountScreen(
     onDelete: (account: Account) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val listState = rememberLazyListState()
+    val listCoroutineScope = rememberCoroutineScope()
+    val openAddDialogue = remember { mutableStateOf(false) }
+
     Column {
-        var usernameAccount by remember { mutableStateOf("") }
-        var passwordAccount by remember { mutableStateOf("") }
-        var serviceNameAccount by remember { mutableStateOf("") }
-        val listState = rememberLazyListState()
-        val listCoroutineScope = rememberCoroutineScope()
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextField(
-                value = serviceNameAccount,
-                onValueChange = { serviceNameAccount = it },
-                placeholder = { Text(text = "Service Name") }
-            )
-
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextField(
-                value = usernameAccount,
-                onValueChange = { usernameAccount = it },
-                placeholder = { Text(text = "Username") }
+        if (openAddDialogue.value) {
+            AddAccountDialogue(
+                onSave = onSave,
+                openAddDialogue = openAddDialogue,
+                listCoroutineScope = listCoroutineScope,
+                listState = listState
             )
         }
+        Button(
+            modifier = Modifier.width(96.dp),
+            onClick = {
+                openAddDialogue.value = true
+            }) {
+            Icon(Icons.Default.Add, null)
+        }
+        PasswordListDisplay(accountList = accountList, state = listState, onDelete)
+    }
+}
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TextField(
-                value = passwordAccount,
-                onValueChange = { passwordAccount = it },
-                placeholder = { Text(text = "Password") }
-            )
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddAccountDialogue(
+    onSave: (account: Account) -> Unit,
+    openAddDialogue: MutableState<Boolean>,
+    listCoroutineScope: CoroutineScope,
+    listState: LazyListState
+) {
+    var usernameAccount by remember { mutableStateOf("") }
+    var passwordAccount by remember { mutableStateOf("") }
+    var serviceNameAccount by remember { mutableStateOf("") }
 
-            Button(
-                modifier = Modifier.width(96.dp),
+    AlertDialog(
+        onDismissRequest = { openAddDialogue.value = false },
+        confirmButton = {
+            TextButton(
                 onClick = {
                     onSave(
                         Account(
@@ -133,30 +127,150 @@ internal fun AccountScreen(
                         delay(100)
                         listState.animateScrollToItem(index = 0)
                     }
-                }) {
-                Icon(Icons.Default.Add, null)
+                    openAddDialogue.value = false
+                }
+            ) {
+                Text("Add")
             }
-        }
-        PasswordListDisplay(accountList = accountList, state = listState, onDelete)
-    }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    openAddDialogue.value = false
+                }
+            ) {
+                Text("Exit")
+            }
+        },
+        text = {
+            Column{
+
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    TextField(
+                        value = serviceNameAccount,
+                        onValueChange = { serviceNameAccount = it },
+                        placeholder = { Text(text = "Service Name") }
+                    )
+
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    TextField(
+                        value = usernameAccount,
+                        onValueChange = { usernameAccount = it },
+                        placeholder = { Text(text = "Username") }
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    TextField(
+                        value = passwordAccount,
+                        onValueChange = { passwordAccount = it },
+                        placeholder = { Text(text = "Password") }
+                    )
+
+
+                }
+                }
+
+            }
+)
 }
+@Composable
+fun ViewPasswordDialogue(account: Account, openPasswordDialogue: MutableState<Boolean>) {
+        AlertDialog(
+            onDismissRequest = { openPasswordDialogue.value = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        openPasswordDialogue.value = false
+                    }
+                ) {
+                    Text("Exit")
+                }
+            },
+            text = {
+                Column{
+                    Row{
+                        Icon(Icons.Default.AccountBox, null)
+                        Text("Service: \n \n ${account.serviceName} \n", fontSize = 24.sp)
+                    }
+                    Row{
+                        Icon(Icons.Default.Person, null)
+                        Text("Username: \n \n ${account.username} \n", fontSize = 24.sp)
+                    }
+                    Row{
+                        Icon(Icons.Default.Lock, null)
+                        Text("Password: \n \n ${account.password} \n", fontSize = 24.sp)
+                    }
+
+                }
+
+            }
+        )
+    }
 
 @Composable
 fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit,) {
+    val openPasswordDialogue = remember { mutableStateOf(false) }
+    if (openPasswordDialogue.value) {
+        ViewPasswordDialogue(account = account, openPasswordDialogue)
+    }
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 24.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("    ${account.serviceName} ${account.username} ${account.password}    ")
-                Spacer(Modifier.weight(1f).fillMaxHeight())
-                Button(
-                    onClick = {
-                        onDelete(account)
-                    }) {
-                    Icon(Icons.Default.Delete, null)
+                Column(modifier = Modifier.weight(10f)) {
+                    Row {
+                        Icon(Icons.Default.AccountBox, null)
+                        Text(
+                            " Service: ${account.serviceName}    ",
+                        )
                     }
+                    Row {
+                        Icon(Icons.Default.Person, null)
+                        Text(
+                            " Username: ${account.username}    ",
+                        )
+                    }
+                }
+                Spacer(
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight())
+                Column {
+                    Button(
+                        onClick = {
+                            onDelete(account)
+                        }) {
+                        Icon(Icons.Default.Delete, null)
+                    }
+                    Button(
+                        onClick = {
+                            openPasswordDialogue.value = true
+                        }) {
+                        Icon(Icons.Default.Info, null)
+                    }
+                }
             }
         }
 }
@@ -169,7 +283,6 @@ fun PasswordListDisplay(accountList: List<Account>, state: LazyListState, onDele
         }
     }
 }
-
 // Previews
 @Preview(showBackground = true)
 @Composable
