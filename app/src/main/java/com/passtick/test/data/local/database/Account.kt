@@ -45,4 +45,7 @@ interface AccountDao {
 
     @Query("SELECT * FROM account WHERE serviceName LIKE :serviceName")
     fun getAccountByServiceName(serviceName: String): Flow<List<Account>>
+
+    @Query("SELECT * FROM account WHERE uid = :id")
+    fun getAccount(id: Int): Flow<Account>
 }

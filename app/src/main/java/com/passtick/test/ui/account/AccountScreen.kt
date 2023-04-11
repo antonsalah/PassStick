@@ -91,7 +91,6 @@ internal fun AccountScreen(
                 Icon(Icons.Filled.Add, "Localized description")
             }
         }
-       //floatingActionButtonPosition = FabPosition.End
     ) {
         Column {
             if (openAddDialogue.value) {
@@ -206,7 +205,12 @@ fun AddAccountDialogue(
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ViewPasswordDialogue(account: Account, openPasswordDialogue: MutableState<Boolean>, onDelete: (account: Account) -> Unit, onSave: (account: Account) -> Unit,) {
+fun ViewPasswordDialogue(
+    account: Account,
+    openPasswordDialogue: MutableState<Boolean>,
+    onDelete: (account: Account) -> Unit,
+    onSave: (account: Account) -> Unit,
+) {
     val isInEditMode = remember { mutableStateOf(false) }
     var usernameAccount by remember { mutableStateOf("") }
     var passwordAccount by remember { mutableStateOf("") }
@@ -285,15 +289,15 @@ fun ViewPasswordDialogue(account: Account, openPasswordDialogue: MutableState<Bo
                 Column {
                     Row {
                         Icon(Icons.Default.AccountBox, null)
-                        Text("Service: \n \n ${serviceNameAccount} \n", fontSize = 24.sp)
+                        Text("Service: \n \n $serviceNameAccount \n", fontSize = 24.sp)
                     }
                     Row {
                         Icon(Icons.Default.Person, null)
-                        Text("Username: \n \n ${usernameAccount} \n", fontSize = 24.sp)
+                        Text("Username: \n \n $usernameAccount \n", fontSize = 24.sp)
                     }
                     Row {
                         Icon(Icons.Default.Lock, null)
-                        Text("Password: \n \n ${passwordAccount} \n", fontSize = 24.sp)
+                        Text("Password: \n \n $passwordAccount \n", fontSize = 24.sp)
                     }
                     Button(
                         onClick = {
@@ -336,7 +340,11 @@ fun onModify(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit, onSave: (account: Account) -> Unit,) {
+fun AccountDisplay(
+    account: Account,
+    onDelete: (account: Account) -> Unit,
+    onSave: (account: Account) -> Unit,
+) {
     val openPasswordDialogue = remember { mutableStateOf(false) }
     if (openPasswordDialogue.value) {
         ViewPasswordDialogue(account = account, openPasswordDialogue, onDelete, onSave)
@@ -365,32 +373,16 @@ fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit, onSav
                         )
                     }
                 }
-                /*
-                Spacer(
-                    Modifier
-                        .weight(1f)
-                        .fillMaxHeight())
-                Column {
-                    Button(
-                        onClick = {
-                            onDelete(account)
-                        }) {
-                        Icon(Icons.Default.Delete, null)
-                    }
-                    Button(
-                        onClick = {
-                            openPasswordDialogue.value = true
-                        }) {
-                        Icon(Icons.Default.Info, null)
-                    }
-                }
-
-                 */
             }
         }
 }
 @Composable
-fun PasswordListDisplay(accountList: List<Account>, state: LazyListState, onDelete: (account: Account) -> Unit, onSave: (account: Account) -> Unit,) {
+fun PasswordListDisplay(
+    accountList: List<Account>,
+    state: LazyListState,
+    onDelete: (account: Account) -> Unit,
+    onSave: (account: Account) -> Unit,
+) {
 
     LazyColumn(state = state) {
         items(items = accountList, key = { it.uid }) { account ->
