@@ -29,13 +29,18 @@ fun AddAccountDialogue(
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.addAccount(
-                        Account(
-                            usernameAccount,
-                            passwordAccount,
-                            serviceNameAccount
+                    if(usernameAccount == "" || passwordAccount == "" || serviceNameAccount == ""){
+                        return@TextButton
+                    }
+                    else{
+                        viewModel.addAccount(
+                            Account(
+                                usernameAccount,
+                                passwordAccount,
+                                serviceNameAccount
+                            )
                         )
-                    )
+                    }
                     usernameAccount = ""
                     passwordAccount = ""
                     serviceNameAccount = ""

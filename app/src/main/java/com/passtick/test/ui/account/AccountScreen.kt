@@ -122,13 +122,13 @@ fun AccountDisplay(account: Account) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(10f)) {
                     Row {
-                        Icon(Icons.Default.AccountBox, null)
+                        Icon(Icons.Default.AccountBox, "Service Name")
                         Text(
                             " Service: ${account.serviceName}    ",
                         )
                     }
                     Row {
-                        Icon(Icons.Default.Person, null)
+                        Icon(Icons.Default.Person, "Username")
                         Text(
                             " Username: ${account.username}    ",
                         )

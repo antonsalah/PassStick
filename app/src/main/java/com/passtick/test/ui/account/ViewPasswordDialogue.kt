@@ -26,6 +26,11 @@ fun ViewPasswordDialogue(
     passwordAccount = account.password
     serviceNameAccount = account.serviceName
 
+    val openDeleteDialogue = remember { mutableStateOf(false) }
+    if (openDeleteDialogue.value) {
+        ConfirmDeleteDialogue(account = account, openDeleteDialogue)
+    }
+
     AlertDialog(
         onDismissRequest = { openPasswordDialogue.value = false },
         confirmButton = {
@@ -82,7 +87,7 @@ fun ViewPasswordDialogue(
                     }
                     Button(
                         onClick = {
-                            viewModel.deleteAccount(account)
+                            openDeleteDialogue.value = true
                         }) {
                         Icon(Icons.Default.Delete, null)
                     }
@@ -90,10 +95,10 @@ fun ViewPasswordDialogue(
                         onClick = {
                             if(isInEditMode.value) {
                                 viewModel.updateAccount(
-                                    account,
-                                    usernameAccount,
-                                    passwordAccount,
-                                    serviceNameAccount,
+                                    accountToUpdate = account,
+                                    newService = serviceNameAccount,
+                                    newUsername = usernameAccount,
+                                    newPassword = passwordAccount
 
                                 )
                             }
@@ -118,7 +123,7 @@ fun ViewPasswordDialogue(
                     }
                     Button(
                         onClick = {
-                            viewModel.deleteAccount(account)
+                            openDeleteDialogue.value = true
                         }) {
                         Icon(Icons.Default.Delete, null)
                     }
@@ -126,11 +131,10 @@ fun ViewPasswordDialogue(
                         onClick = {
                             if(isInEditMode.value) {
                                 viewModel.updateAccount(
-                                    account,
-                                    usernameAccount,
-                                    passwordAccount,
-                                    serviceNameAccount,
-
+                                    accountToUpdate = account,
+                                    newService = serviceNameAccount,
+                                    newUsername = usernameAccount,
+                                    newPassword = passwordAccount
                                 )
                             }
                             isInEditMode.value = !isInEditMode.value
