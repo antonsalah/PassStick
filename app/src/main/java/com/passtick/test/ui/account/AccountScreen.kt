@@ -38,13 +38,11 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+
 
 @Composable
-fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = hiltViewModel()) {
+fun AccountScreen(modifier: Modifier = Modifier) {
+    val viewModel: AccountViewModel = hiltViewModel()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val items by produceState<AccountUiState>(
         initialValue = AccountUiState.Loading,
@@ -58,8 +56,6 @@ fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = h
     if (items is AccountUiState.Success) {
         AccountScreen(
             accountList = (items as AccountUiState.Success).data,
-            onSave = viewModel::addAccount,
-            onDelete = viewModel::deleteAccount,
             modifier = modifier
         )
     }
@@ -70,8 +66,6 @@ fun AccountScreen(modifier: Modifier = Modifier, viewModel: AccountViewModel = h
 @Composable
 internal fun AccountScreen(
     accountList: List<Account>,
-    onSave: (account: Account) -> Unit,
-    onDelete: (account: Account) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
@@ -91,255 +85,30 @@ internal fun AccountScreen(
                 Icon(Icons.Filled.Add, "Localized description")
             }
         }
-       //floatingActionButtonPosition = FabPosition.End
     ) {
         Column {
             if (openAddDialogue.value) {
                 AddAccountDialogue(
-                    onSave = onSave,
                     openAddDialogue = openAddDialogue,
                     listCoroutineScope = listCoroutineScope,
                     listState = listState
                 )
             }
-            PasswordListDisplay(accountList = accountList, state = listState, onDelete, onSave)
+            PasswordListDisplay(accountList = accountList, state = listState)
         }
     }
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AddAccountDialogue(
-    onSave: (account: Account) -> Unit,
-    openAddDialogue: MutableState<Boolean>,
-    listCoroutineScope: CoroutineScope,
-    listState: LazyListState
-) {
-    var usernameAccount by remember { mutableStateOf("") }
-    var passwordAccount by remember { mutableStateOf("") }
-    var serviceNameAccount by remember { mutableStateOf("") }
-
-    AlertDialog(
-        onDismissRequest = { openAddDialogue.value = false },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onSave(
-                        Account(
-                            usernameAccount,
-                            passwordAccount,
-                            serviceNameAccount
-                        )
-                    )
-                    usernameAccount = ""
-                    passwordAccount = ""
-                    serviceNameAccount = ""
-                    listCoroutineScope.launch {
-                        delay(100)
-                        listState.animateScrollToItem(index = 0)
-                    }
-                    openAddDialogue.value = false
-                }
-            ) {
-                Text("Add")
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {
-                    openAddDialogue.value = false
-                }
-            ) {
-                Text("Exit")
-            }
-        },
-        text = {
-            Column{
 
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    TextField(
-                        value = serviceNameAccount,
-                        onValueChange = { serviceNameAccount = it },
-                        placeholder = { Text(text = "Service Name") }
-                    )
-
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    TextField(
-                        value = usernameAccount,
-                        onValueChange = { usernameAccount = it },
-                        placeholder = { Text(text = "Username") }
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    TextField(
-                        value = passwordAccount,
-                        onValueChange = { passwordAccount = it },
-                        placeholder = { Text(text = "Password") }
-                    )
-
-
-                }
-                }
-
-            }
-)
-}
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ViewPasswordDialogue(account: Account, openPasswordDialogue: MutableState<Boolean>, onDelete: (account: Account) -> Unit, onSave: (account: Account) -> Unit,) {
-    val isInEditMode = remember { mutableStateOf(false) }
-    var usernameAccount by remember { mutableStateOf("") }
-    var passwordAccount by remember { mutableStateOf("") }
-    var serviceNameAccount by remember { mutableStateOf("") }
-    usernameAccount = account.username
-    passwordAccount = account.password
-    serviceNameAccount = account.serviceName
-    AlertDialog(
-        onDismissRequest = { openPasswordDialogue.value = false },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    openPasswordDialogue.value = false
-                }
-            ) {
-                Text("Exit")
-            }
-        },
-        text = {
-            if(isInEditMode.value) {
-                Column {
-                    Row (
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 24.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                            ){
-
-                        Icon(Icons.Default.AccountBox, null)
-                        TextField(
-                            value = serviceNameAccount,
-                            onValueChange = { serviceNameAccount = it },
-                            placeholder = { Text(text = serviceNameAccount) }
-                        )
-                    }
-                    Row (
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 24.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                            ){
-                        Icon(Icons.Default.Person, null)
-                        TextField(
-                            value = usernameAccount,
-                            onValueChange = { usernameAccount = it },
-                            placeholder = { Text(text = usernameAccount) }
-                        )
-                    }
-                    Row (
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 24.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                            ){
-                        Icon(Icons.Default.Lock, null)
-                        TextField(
-                            value = passwordAccount,
-                            onValueChange = { passwordAccount = it },
-                            placeholder = { Text(text = passwordAccount) }
-                        )
-                    }
-                    Button(
-                        onClick = {
-                            onDelete(account)
-                        }) {
-                        Icon(Icons.Default.Delete, null)
-                    }
-                    Button(
-                        onClick = {
-                            onModify(isInEditMode, account, onDelete, onSave, serviceNameAccount, usernameAccount, passwordAccount)
-                        }) {
-                        Icon(Icons.Default.Check, null)
-                    }
-                }
-            } else {
-                Column {
-                    Row {
-                        Icon(Icons.Default.AccountBox, null)
-                        Text("Service: \n \n ${serviceNameAccount} \n", fontSize = 24.sp)
-                    }
-                    Row {
-                        Icon(Icons.Default.Person, null)
-                        Text("Username: \n \n ${usernameAccount} \n", fontSize = 24.sp)
-                    }
-                    Row {
-                        Icon(Icons.Default.Lock, null)
-                        Text("Password: \n \n ${passwordAccount} \n", fontSize = 24.sp)
-                    }
-                    Button(
-                        onClick = {
-                            onDelete(account)
-                        }) {
-                        Icon(Icons.Default.Delete, null)
-                    }
-                    Button(
-                        onClick = {
-                            onModify(isInEditMode, account, onDelete, onSave, serviceNameAccount, usernameAccount, passwordAccount)
-                        }) {
-                        Icon(Icons.Default.Edit, null)
-                    }
-                }
-            }
-        }
-    )
-}
-
-fun onModify(
-    isInEditMode: MutableState<Boolean>,
-    account: Account,
-    onDelete: (account: Account) -> Unit,
-    onSave: (account: Account) -> Unit,
-    serviceNameAccount: String,
-    usernameAccount: String,
-    passwordAccount: String,) {
-    if(isInEditMode.value) {
-        onDelete(account)
-        onSave(
-            Account(
-                usernameAccount,
-                passwordAccount,
-                serviceNameAccount,
-            )
-        )
-    }
-    isInEditMode.value = !isInEditMode.value
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit, onSave: (account: Account) -> Unit,) {
+fun AccountDisplay(account: Account) {
     val openPasswordDialogue = remember { mutableStateOf(false) }
     if (openPasswordDialogue.value) {
-        ViewPasswordDialogue(account = account, openPasswordDialogue, onDelete, onSave)
+        ViewPasswordDialogue(account = account, openPasswordDialogue)
     }
 
         Card(
@@ -353,48 +122,30 @@ fun AccountDisplay(account: Account, onDelete: (account: Account) -> Unit, onSav
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(10f)) {
                     Row {
-                        Icon(Icons.Default.AccountBox, null)
+                        Icon(Icons.Default.AccountBox, "Service Name")
                         Text(
                             " Service: ${account.serviceName}    ",
                         )
                     }
                     Row {
-                        Icon(Icons.Default.Person, null)
+                        Icon(Icons.Default.Person, "Username")
                         Text(
                             " Username: ${account.username}    ",
                         )
                     }
                 }
-                /*
-                Spacer(
-                    Modifier
-                        .weight(1f)
-                        .fillMaxHeight())
-                Column {
-                    Button(
-                        onClick = {
-                            onDelete(account)
-                        }) {
-                        Icon(Icons.Default.Delete, null)
-                    }
-                    Button(
-                        onClick = {
-                            openPasswordDialogue.value = true
-                        }) {
-                        Icon(Icons.Default.Info, null)
-                    }
-                }
-
-                 */
             }
         }
 }
 @Composable
-fun PasswordListDisplay(accountList: List<Account>, state: LazyListState, onDelete: (account: Account) -> Unit, onSave: (account: Account) -> Unit,) {
+fun PasswordListDisplay(
+    accountList: List<Account>,
+    state: LazyListState,
+) {
 
     LazyColumn(state = state) {
         items(items = accountList, key = { it.uid }) { account ->
-            AccountDisplay(account = account, onDelete, onSave)
+            AccountDisplay(account = account)
         }
     }
 }
@@ -403,7 +154,7 @@ fun PasswordListDisplay(accountList: List<Account>, state: LazyListState, onDele
 @Composable
 private fun DefaultPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {}, onDelete = {})
+        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")))
     }
 }
 
@@ -411,6 +162,6 @@ private fun DefaultPreview() {
 @Composable
 private fun PortraitPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")), onSave = {}, onDelete = {})
+        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")))
     }
 }

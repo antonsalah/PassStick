@@ -17,32 +17,13 @@
 package com.passtick.test.data.local.database
 
 import androidx.room.*
-import kotlinx.coroutines.flow.Flow
 
 @Entity
 data class Account(
     var username: String,
     var password: String,
-    var serviceName: String
-) {
+    var serviceName: String,
     @PrimaryKey(autoGenerate = true)
-    var uid: Int = 0
-}
+    val uid: Int = 0
+)
 
-@Dao
-interface AccountDao {
-    @Query("SELECT * FROM account ORDER BY uid DESC LIMIT 1000")
-    fun getAccounts(): Flow<List<Account>>
-
-    @Insert
-    suspend fun insertAccount(item: Account)
-
-    @Delete
-    suspend fun deleteAccount(item: Account)
-
-    @Update
-    suspend fun updateAccount(item: Account)
-
-    @Query("SELECT * FROM account WHERE serviceName LIKE :serviceName")
-    fun getAccountByServiceName(serviceName: String): Flow<List<Account>>
-}

@@ -48,6 +48,14 @@ class FakeAccountRepository @Inject constructor() : AccountRepository {
     override suspend fun add(account: Account) {
         throw NotImplementedError()
     }
+
+    override suspend fun update(account: Account) {
+        throw NotImplementedError()
+    }
+
+    override suspend fun queryByServiceName(account: Account) {
+        throw NotImplementedError()
+    }
 }
 
 val fakeAccounts = listOf(Account("One", "Two", "Three"))

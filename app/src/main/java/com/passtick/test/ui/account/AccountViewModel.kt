@@ -52,6 +52,26 @@ class AccountViewModel @Inject constructor(
             accountRepository.delete(accountToDelete)
         }
     }
+
+    fun updateAccount(
+        accountToUpdate: Account,
+        newService:  String = accountToUpdate.serviceName,
+        newUsername: String = accountToUpdate.username,
+        newPassword: String = accountToUpdate.password)
+    {
+        val id: Int = accountToUpdate.uid
+
+        viewModelScope.launch{
+            accountRepository.update(
+                Account(
+                    uid = id,
+                    serviceName = newService,
+                    username = newUsername,
+                    password = newPassword,
+                )
+            )
+        }
+    }
 }
 
 sealed interface AccountUiState {
