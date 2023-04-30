@@ -41,7 +41,7 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
-        final byte[] passphrase = SQLiteDatabase.getBytes("Password")
+        val passphrase = SQLiteDatabase.getBytes("Password".toCharArray())
         val factory = SupportFactory(passphrase)
         return Room.databaseBuilder(appContext, AppDatabase::class.java, "Account")
             .openHelperFactory(factory)
