@@ -1,6 +1,5 @@
 package com.passtick.test.buisiness
 
-import java.security.SecureRandom
 import kotlin.random.Random
 
 
@@ -10,10 +9,10 @@ class PasswordGenerator {
 
         val charList = mutableListOf<Char>()
         val tempPass = mutableListOf<Char>()
-        val symbols = listOf('!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '=', '-', '"', ':', ';', '[', ']', '\\', '\'', '|', ',', '<', '>', '.', '?')
-        var password : String = ""
+        val symbols = listOf('!', '@', '#', '%', '^', '&', '*', '(', ')', '-', '=', '"', ':', ';', '[', ']', '|', ',', '<', '>', '.', '?', '\\', '\'', '\$')
+        val numbers = listOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
         var size = Length
-        var random = Random.nextInt(charList.size)
+
 
 
         for(char in 'a' .. 'z')
@@ -23,12 +22,11 @@ class PasswordGenerator {
             charList.add(char)
 
 
-
         if(includeNumbers) {
-            for (char in '0'..'9') {
+            for (char in numbers) {
                 charList.add(char)
             }
-            tempPass.add(Random.nextInt(10).toChar())
+            tempPass.add(numbers[Random.nextInt(numbers.size)])
             size--
         }
 
@@ -46,8 +44,7 @@ class PasswordGenerator {
         }
 
         tempPass.shuffle()
-        password = tempPass.toString()
 
-        return password
+        return tempPass.joinToString(separator = "")
     }
 }
