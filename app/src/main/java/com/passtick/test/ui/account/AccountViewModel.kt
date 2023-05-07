@@ -16,6 +16,11 @@
 
 package com.passtick.test.ui.account
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,10 +42,15 @@ class AccountViewModel @Inject constructor(
     private val accountRepository: AccountRepository
 ) : ViewModel() {
 
+    var textState = mutableStateOf(TextFieldValue(""))
+    val dummy: List<Account> = emptyList()
+    var filteredAccounts = mutableStateOf(dummy)
     val uiState: StateFlow<AccountUiState> = accountRepository
         .accounts.map<List<Account>, AccountUiState>(::Success)
         .catch { emit(Error(it)) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), Loading)
+
+
 
     fun addAccount(accountToAdd: Account) {
         viewModelScope.launch {
@@ -71,6 +81,13 @@ class AccountViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    fun resetSearchField() {
+        textState.value = TextFieldValue("")
+    }
+    fun init(value: List<Account>) {
+        filteredAccounts.value = value
     }
 }
 

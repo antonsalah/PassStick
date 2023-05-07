@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.passtick.test.data.local.database.Account
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 fun AddAccountDialogue(
     openAddDialogue: MutableState<Boolean>,
     listCoroutineScope: CoroutineScope,
-    listState: LazyListState
+    listState: LazyListState,
+    accountList: List<Account>,
 ) {
     val viewModel: AccountViewModel = hiltViewModel()
     var usernameAccount by remember { mutableStateOf("") }
@@ -48,6 +50,8 @@ fun AddAccountDialogue(
                         delay(100)
                         listState.animateScrollToItem(index = 0)
                     }
+                    viewModel.resetSearchField()
+                    viewModel.init(accountList)
                     openAddDialogue.value = false
                 }
             ) {
