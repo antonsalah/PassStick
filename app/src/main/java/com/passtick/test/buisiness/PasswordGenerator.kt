@@ -13,14 +13,11 @@ class PasswordGenerator {
         val numbers = listOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
         var size = Length
 
-
-
         for(char in 'a' .. 'z')
             charList.add(char)
 
         for(char in 'A' .. 'Z')
             charList.add(char)
-
 
         if(includeNumbers) {
             for (char in numbers) {
@@ -38,13 +35,12 @@ class PasswordGenerator {
             size--
         }
 
-
         repeat(size){
            tempPass.add(charList[Random.nextInt(charList.size)])
         }
 
         tempPass.shuffle()
-
+        
         return tempPass.joinToString(separator = "")
     }
 }
