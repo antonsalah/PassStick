@@ -26,4 +26,3 @@ data class Account(
     @PrimaryKey(autoGenerate = true)
     val uid: Int = 0
 )
-

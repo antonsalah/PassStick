@@ -38,7 +38,7 @@ interface DataModule {
         accountRepository: DefaultAccountRepository
     ): AccountRepository
 }
-
+/*
 class FakeAccountRepository @Inject constructor() : AccountRepository {
     override val accounts: Flow<List<Account>> = flowOf(fakeAccounts)
 
@@ -53,9 +53,10 @@ class FakeAccountRepository @Inject constructor() : AccountRepository {
         throw NotImplementedError()
     }
 
-    override suspend fun queryByServiceName(account: Account) {
+    suspend fun queryByServiceName(account: Account) {
         throw NotImplementedError()
     }
 }
 
 val fakeAccounts = listOf(Account("One", "Two", "Three"))
+*/
