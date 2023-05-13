@@ -60,8 +60,7 @@ fun AccountScreen(modifier: Modifier = Modifier) {
         }
     }
     if (items is AccountUiState.Success) {
-        AccountScreen(
-            accountList = (items as AccountUiState.Success).data,
+        AccountDisplayList(
             modifier = modifier
         )
     }
@@ -70,8 +69,7 @@ fun AccountScreen(modifier: Modifier = Modifier) {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun AccountScreen(
-    accountList: List<Account>,
+internal fun AccountDisplayList(
     modifier: Modifier = Modifier
 ) {
     val viewModel: AccountViewModel = hiltViewModel()
@@ -200,24 +198,13 @@ fun AccountDisplay(account: Account) {
             }
         }
 }
-@Composable
-fun PasswordListDisplay(
-    accountList: List<Account>,
-    state: LazyListState,
-) {
 
-    LazyColumn(state = state) {
-        items(items = accountList, key = { it.uid }) { account ->
-            AccountDisplay(account = account)
-        }
-    }
-}
 // Previews
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")))
+        AccountScreen()
     }
 }
 
@@ -225,6 +212,6 @@ private fun DefaultPreview() {
 @Composable
 private fun PortraitPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")))
+        AccountScreen()
     }
 }
