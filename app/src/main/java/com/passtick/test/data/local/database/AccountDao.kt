@@ -22,4 +22,5 @@ interface AccountDao {
 
     @Query("SELECT * FROM account WHERE uid = :id")
     fun getAccount(id: Int): Flow<Account>
+
 }

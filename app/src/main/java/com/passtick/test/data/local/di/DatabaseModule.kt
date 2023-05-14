@@ -47,4 +47,5 @@ class DatabaseModule {
             .openHelperFactory(factory)
             .build()
     }
+
 }

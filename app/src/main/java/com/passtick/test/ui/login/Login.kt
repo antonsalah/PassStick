@@ -1,4 +1,4 @@
-package com.passtick.test.ui
+package com.passtick.test.ui.login
 
 import android.os.Bundle
 import android.widget.Toast
@@ -46,7 +46,6 @@ fun MainNavigation() {
 fun LoginScreen(navController: NavController) {
     val context = LocalContext.current
 
-    // Add other composables for UI elements (e.g., EditText, Button) here
 
     val passwordEditText = remember { mutableStateOf(TextFieldValue("")) }
 
