@@ -124,7 +124,7 @@ fun SearchView() {
             viewModel.updateQuery(value)
         },
         modifier = Modifier.fillMaxWidth(),
-        textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
+        textStyle = TextStyle( fontSize = 18.sp),
         leadingIcon = {
             Icon(
                 Icons.Default.Search,
@@ -154,8 +154,6 @@ fun SearchView() {
         singleLine = true,
         shape = RectangleShape, // The TextFiled has rounded corners top left and right by default
         colors = TextFieldDefaults.textFieldColors(
-            textColor = Color.White,
-            cursorColor = Color.White,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent
