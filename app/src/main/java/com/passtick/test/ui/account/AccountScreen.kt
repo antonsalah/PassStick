@@ -38,6 +38,12 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 
 @Composable
@@ -54,8 +60,7 @@ fun AccountScreen(modifier: Modifier = Modifier) {
         }
     }
     if (items is AccountUiState.Success) {
-        AccountScreen(
-            accountList = (items as AccountUiState.Success).data,
+        AccountDisplayList(
             modifier = modifier
         )
     }
@@ -64,13 +69,14 @@ fun AccountScreen(modifier: Modifier = Modifier) {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun AccountScreen(
-    accountList: List<Account>,
+internal fun AccountDisplayList(
     modifier: Modifier = Modifier
 ) {
+    val viewModel: AccountViewModel = hiltViewModel()
     val listState = rememberLazyListState()
     val listCoroutineScope = rememberCoroutineScope()
     val openAddDialogue = remember { mutableStateOf(false) }
+    viewModel.updateQuery("") // initial query populates empty accountList
 
     Scaffold(
         floatingActionButton = {
@@ -86,21 +92,76 @@ internal fun AccountScreen(
             }
         }
     ) {
-        Column {
-            if (openAddDialogue.value) {
-                AddAccountDialogue(
-                    openAddDialogue = openAddDialogue,
-                    listCoroutineScope = listCoroutineScope,
-                    listState = listState
-                )
+        if (openAddDialogue.value) {
+            AddAccountDialogue(
+                openAddDialogue = openAddDialogue,
+                listCoroutineScope = listCoroutineScope,
+                listState = listState,
+            )
+        }
+        LazyColumn(state = listState) {
+            item {
+                Row(modifier) {
+                    SearchView()
+                }
             }
-            PasswordListDisplay(accountList = accountList, state = listState)
+            items(items = viewModel.filteredAccounts.value, key = { it.uid }) { account ->
+                AccountDisplay(account = account)
+            }
         }
     }
-
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchView() {
+    var viewModel: AccountViewModel = hiltViewModel()
+
+    TextField(
+        value = viewModel.textState.value,
+        onValueChange = { value ->
+            viewModel.updateQuery(value)
+        },
+        modifier = Modifier.fillMaxWidth(),
+        textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
+        leadingIcon = {
+            Icon(
+                Icons.Default.Search,
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(15.dp)
+                    .size(24.dp)
+            )
+        },
+        trailingIcon = {
+            if (viewModel.textState.value != TextFieldValue("").text) {
+                IconButton(
+                    onClick = {
+                        viewModel.updateQuery("")// Remove text from TextField when you press the 'X' icon
+                    }
+                ) {
+                    Icon(
+                        Icons.Default.Close,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .padding(15.dp)
+                            .size(24.dp)
+                    )
+                }
+            }
+        },
+        singleLine = true,
+        shape = RectangleShape, // The TextFiled has rounded corners top left and right by default
+        colors = TextFieldDefaults.textFieldColors(
+            textColor = Color.White,
+            cursorColor = Color.White,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        )
+    )
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -136,24 +197,13 @@ fun AccountDisplay(account: Account) {
             }
         }
 }
-@Composable
-fun PasswordListDisplay(
-    accountList: List<Account>,
-    state: LazyListState,
-) {
 
-    LazyColumn(state = state) {
-        items(items = accountList, key = { it.uid }) { account ->
-            AccountDisplay(account = account)
-        }
-    }
-}
 // Previews
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")))
+        AccountScreen()
     }
 }
 
@@ -161,6 +211,6 @@ private fun DefaultPreview() {
 @Composable
 private fun PortraitPreview() {
     MyApplicationTheme {
-        AccountScreen(listOf(Account("Compose", "Room", "Kotlin")))
+        AccountScreen()
     }
 }
