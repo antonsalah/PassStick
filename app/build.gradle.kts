@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 @Suppress("DSL_SCOPE_VIOLATION") // Remove when fixed https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
     alias(libs.plugins.android.application)
@@ -30,7 +29,7 @@ android {
 
     defaultConfig {
         applicationId = "com.passtick.test"
-        minSdk = 25
+        minSdk = 21
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -92,10 +91,6 @@ dependencies {
 
     // Hilt Dependency Injection
     implementation(libs.hilt.android)
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.5.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.wear.tiles:tiles-material:1.1.0-alpha04")
     kapt(libs.hilt.compiler)
     // Hilt and instrumented tests.
     androidTestImplementation(libs.hilt.android.testing)

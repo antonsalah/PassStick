@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-//package com.passtick.test.ui
+package com.passtick.test.ui
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.passtick.test.ui.account.AccountScreen
 
-//@Composable
-//fun MainNavigation() {
-//    val navController = rememberNavController()
+@Composable
+fun MainNavigation() {
+    val navController = rememberNavController()
 
-//    NavHost(navController = navController, startDestination = "login") {
-  //      composable("login") { LoginScreenWrapper(navController = navController) }
-    //    composable("account") { AccountScreen() }
-    //}
-//}
-
+    NavHost(navController = navController, startDestination = "main") {
+        composable("main") { AccountScreen(modifier = Modifier.padding(16.dp)) }
+        // TODO: Add more destinations
+    }
+}
