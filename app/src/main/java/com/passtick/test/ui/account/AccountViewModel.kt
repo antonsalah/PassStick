@@ -47,11 +47,13 @@ class AccountViewModel @Inject constructor(
         viewModelScope.launch {
             accountRepository.add(accountToAdd)
         }
+        updateQuery("")
     }
     fun deleteAccount(accountToDelete: Account) {
         viewModelScope.launch {
             accountRepository.delete(accountToDelete)
         }
+        updateQuery("")
     }
 
     fun updateAccount(
@@ -72,6 +74,8 @@ class AccountViewModel @Inject constructor(
                 )
             )
         }
+
+        updateQuery("")
     }
 
     fun updateQuery(query: String) {
