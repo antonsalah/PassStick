@@ -110,7 +110,6 @@ fun AccountDisplay(account: Account) {
     if (openPasswordDialogue.value) {
         ViewPasswordDialogue(account = account, openPasswordDialogue)
     }
-
         Card(
             modifier = Modifier
                 .fillMaxWidth()
