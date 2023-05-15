@@ -18,13 +18,15 @@ package com.passtick.test.data.local.di
 
 import android.content.Context
 import androidx.room.Room
+import com.passtick.test.data.local.database.AccountDao
+import com.passtick.test.data.local.database.AppDatabase
+import net.sqlcipher.database.SupportFactory
+import net.sqlcipher.database.SQLiteDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import com.passtick.test.data.local.database.AppDatabase
-import com.passtick.test.data.local.database.AccountDao
 import javax.inject.Singleton
 
 
@@ -39,10 +41,10 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
-        return Room.databaseBuilder(
-            appContext,
-            AppDatabase::class.java,
-            "Account"
-        ).build()
+        val passphrase = SQLiteDatabase.getBytes("XIUGS56433DGJHGC884629837".toCharArray())
+        val factory = SupportFactory(passphrase)
+        return Room.databaseBuilder(appContext, AppDatabase::class.java, "Account")
+            .openHelperFactory(factory)
+            .build()
     }
 }

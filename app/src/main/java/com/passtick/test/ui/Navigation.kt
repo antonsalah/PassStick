@@ -24,13 +24,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.passtick.test.ui.account.AccountScreen
+import com.passtick.test.ui.login.LoginScreen
 
 @Composable
 fun MainNavigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "main") {
-        composable("main") { AccountScreen(modifier = Modifier.padding(16.dp)) }
-        // TODO: Add more destinations
+    NavHost(navController = navController, startDestination = "login") {
+        composable("account") { AccountScreen(modifier = Modifier.padding(16.dp)) }
+        composable( "login") { LoginScreen(modifier = Modifier.padding(16.dp), navController = navController)}
     }
 }

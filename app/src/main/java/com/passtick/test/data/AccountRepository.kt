@@ -27,7 +27,7 @@ interface AccountRepository {
     suspend fun delete(account: Account)
     suspend fun add(account: Account)
     suspend fun update(account: Account)
-    suspend fun queryByServiceName(account: Account)
+    suspend fun getAccountByServiceName(serviceName: String): Flow<List<Account>>
 }
 
 class DefaultAccountRepository @Inject constructor(
@@ -49,7 +49,7 @@ class DefaultAccountRepository @Inject constructor(
         accountDao.updateAccount(account)
     }
 
-    override suspend fun queryByServiceName(account: Account){
-        accountDao.updateAccount(account)
+    override suspend fun getAccountByServiceName(serviceName: String): Flow<List<Account>> {
+        return accountDao.queryByServiceName(serviceName).map {items -> items.map {it}}
     }
 }
