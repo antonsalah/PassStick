@@ -49,7 +49,7 @@ class DefaultAccountRepository @Inject constructor(
         accountDao.updateAccount(account)
     }
 
-    override suspend fun getAccountByServiceName(serviceName : String) : Flow<List<Account>>{
-       return accountDao.getAccountByServiceName(serviceName).map {items -> items.map {it}}
+    override suspend fun getAccountByServiceName(serviceName: String): Flow<List<Account>> {
+        return accountDao.queryByServiceName(serviceName).map {items -> items.map {it}}
     }
 }

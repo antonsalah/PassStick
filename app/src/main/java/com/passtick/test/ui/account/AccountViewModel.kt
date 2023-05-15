@@ -16,31 +16,32 @@
 
 package com.passtick.test.ui.account
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import com.passtick.test.data.AccountRepository
 import com.passtick.test.data.local.database.Account
 import com.passtick.test.ui.account.AccountUiState.Error
 import com.passtick.test.ui.account.AccountUiState.Loading
 import com.passtick.test.ui.account.AccountUiState.Success
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
     private val accountRepository: AccountRepository
 ) : ViewModel() {
+    private val fakeAccounts: List<Account> = emptyList()
 
     val uiState: StateFlow<AccountUiState> = accountRepository
         .accounts.map<List<Account>, AccountUiState>(::Success)
         .catch { emit(Error(it)) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), Loading)
+
+    var textState = mutableStateOf("")
+    var filteredAccounts = mutableStateOf(fakeAccounts)
 
     fun addAccount(accountToAdd: Account) {
         viewModelScope.launch {
@@ -71,6 +72,15 @@ class AccountViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    fun updateQuery(query: String) {
+        viewModelScope.launch {
+            filteredAccounts.value = accountRepository
+                .getAccountByServiceName(query)
+                .first()
+        }
+        textState.value = query
     }
 }
 
